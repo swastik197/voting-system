@@ -17,7 +17,7 @@ export default function Elections() {
       category: "federal",
       candidates: 4,
       registeredVoters: 158432,
-      image: "/election-1.jpg"
+      image: "https://images.unsplash.com/photo-1569008593571-6c74293da333/ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80"
     },
     {
       id: 2,
@@ -30,7 +30,7 @@ export default function Elections() {
       candidates: 3,
       registeredVoters: 45623,
       votes: 12847,
-      image: "/election-2.jpg"
+      image: "https://images.unsplash.com/photo-1477959858617-67f85cf4f1df/ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80"
     },
     {
       id: 3,
@@ -43,7 +43,32 @@ export default function Elections() {
       candidates: 6,
       registeredVoters: 23154,
       votes: 18923,
-      image: "/election-3.jpg"
+      image: "https://images.unsplash.com/photo-1523050854058-8df90110c9f1/ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80"
+    },
+    {
+      id: 4,
+      title: "State Senator Election",
+      description: "Choose your representative in the State Senate. This election will impact state-level legislation and policy decisions.",
+      startDate: "2024-05-12",
+      endDate: "2024-05-12",
+      status: "upcoming",
+      category: "state",
+      candidates: 5,
+      registeredVoters: 89765,
+      image: "https://images.unsplash.com/photo-1532521750441-f7bb3ad8c8ee/ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80"
+    },
+    {
+      id: 5,
+      title: "City Council District 3",
+      description: "Elect your local city council representative for District 3. Focus on neighborhood issues and community development.",
+      startDate: "2024-04-18",
+      endDate: "2024-04-18",
+      status: "active",
+      category: "local",
+      candidates: 4,
+      registeredVoters: 12890,
+      votes: 3456,
+      image: "https://images.unsplash.com/photo-1587691592099-24045742c181/ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80"
     }
   ];
 
@@ -170,20 +195,34 @@ export default function Elections() {
             <div key={election.id} className="group">
               <div className="bg-white/70 backdrop-blur-xl rounded-2xl shadow-lg border border-white/20 overflow-hidden hover:shadow-2xl transition-all duration-300 hover:-translate-y-2">
                 {/* Election Image */}
-                <div className="h-48 bg-gradient-to-br from-blue-400 via-purple-500 to-indigo-600 relative overflow-hidden">
-                  <div className="absolute inset-0 bg-black/20"></div>
-                  <div className="absolute inset-0 flex items-center justify-center">
+                <div className="h-48 relative overflow-hidden bg-gray-200">
+                  <img 
+                    src={election.image} 
+                    alt={election.title}
+                    className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-110"
+                    onError={(e) => {
+                      e.target.style.display = 'none';
+                      e.target.nextSibling.style.display = 'block';
+                    }}
+                  />
+                  <div 
+                    className="w-full h-full bg-gradient-to-br from-blue-400 via-purple-500 to-indigo-600 flex items-center justify-center" 
+                    style={{display: 'none'}}
+                  >
                     <svg className="w-16 h-16 text-white/80" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" d="M9 5H7a2 2 0 00-2 2v10a2 2 0 002 2h8a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
                     </svg>
                   </div>
                   
+                  {/* Overlay for better text visibility */}
+                  <div className="absolute inset-0 bg-black/20"></div>
+                  
                   {/* Status and Category Badges */}
                   <div className="absolute top-4 left-4 flex gap-2">
-                    <span className={`px-3 py-1 rounded-full text-xs font-semibold border ${getStatusColor(election.status)}`}>
+                    <span className={`px-3 py-1 rounded-full text-xs font-semibold border backdrop-blur-sm ${getStatusColor(election.status)}`}>
                       {election.status}
                     </span>
-                    <span className={`px-3 py-1 rounded-full text-xs font-semibold border ${getCategoryColor(election.category)}`}>
+                    <span className={`px-3 py-1 rounded-full text-xs font-semibold border backdrop-blur-sm ${getCategoryColor(election.category)}`}>
                       {election.category}
                     </span>
                   </div>
