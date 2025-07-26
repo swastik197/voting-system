@@ -58,7 +58,7 @@ export default function Home() {
           {/* Desktop actions */}
           <div className="hidden md:flex gap-1 sm:gap-2 md:gap-3">
             <Link href="/elections" className="flex min-w-[90px] sm:min-w-[100px] md:min-w-[120px] max-w-[480px] cursor-pointer items-center justify-center overflow-hidden rounded-xl h-9 sm:h-10 md:h-11 px-3 sm:px-4 md:px-5 bg-gradient-to-r from-sky-400 via-blue-500 to-blue-700 text-white text-sm sm:text-base font-semibold leading-normal tracking-wide shadow-lg hover:from-sky-500 hover:to-blue-800 hover:scale-105 active:scale-95 transition-all duration-200">
-              <span className="truncate">Find Elections</span>
+              <span className="truncate">Elections</span>
             </Link>
             <Link href="/voter-auth" className="flex min-w-[60px] sm:min-w-[70px] md:min-w-[84px] max-w-[480px] cursor-pointer items-center justify-center overflow-hidden rounded-xl h-9 sm:h-10 md:h-11 px-3 sm:px-4 md:px-5 bg-gradient-to-r from-blue-100 via-blue-200 to-blue-300 text-blue-800 text-sm sm:text-base font-semibold leading-normal tracking-wide hover:bg-gradient-to-br hover:from-blue-200 hover:to-blue-400 shadow-md hover:scale-105 active:scale-95 transition-all duration-200">
               <span className="truncate">Vote</span>
@@ -83,7 +83,7 @@ export default function Home() {
               <a className="text-blue-700 text-base font-medium px-2 py-2 rounded transition-colors hover:text-blue-800 hover:bg-blue-50 focus:outline-none focus-visible:ring-2 focus-visible:ring-sky-400" href="#" onClick={() => setMenuOpen(false)}>Security</a>
               <a className="text-blue-700 text-base font-medium px-2 py-2 rounded transition-colors hover:text-blue-800 hover:bg-blue-50 focus:outline-none focus-visible:ring-2 focus-visible:ring-sky-400" href="#" onClick={() => setMenuOpen(false)}>Help</a>
               <Link href="/elections" className="mt-2 flex w-full items-center justify-center overflow-hidden rounded-xl h-10 px-4 bg-gradient-to-r from-sky-400 via-blue-500 to-blue-700 text-white text-base font-semibold leading-normal tracking-wide shadow-lg hover:from-sky-500 hover:to-blue-800 hover:scale-105 active:scale-95 transition-all duration-200" onClick={() => setMenuOpen(false)}>
-                Find Elections
+                Elections
               </Link>
               <Link href="/voter-auth" className="mt-1 flex w-full items-center justify-center overflow-hidden rounded-xl h-10 px-4 bg-gradient-to-r from-blue-100 via-blue-200 to-blue-300 text-blue-800 text-base font-semibold leading-normal tracking-wide hover:bg-gradient-to-br hover:from-blue-200 hover:to-blue-400 shadow-md hover:scale-105 active:scale-95 transition-all duration-200" onClick={() => setMenuOpen(false)}>
                 Vote
@@ -115,7 +115,7 @@ export default function Home() {
                       Participate in shaping the future by casting your vote in upcoming elections. Our platform ensures a secure and transparent voting process, making your voice heard.
                     </p>
                     <Link href="/elections" className="mt-4 flex min-w-[100px] xs:min-w-[120px] sm:min-w-[150px] max-w-[480px] cursor-pointer items-center justify-center overflow-hidden rounded-xl h-10 xs:h-11 sm:h-12 px-3 xs:px-4 sm:px-6 md:h-14 md:px-8 bg-gradient-to-r from-sky-400 via-blue-500 to-blue-700 text-white text-sm xs:text-base sm:text-lg font-bold leading-normal tracking-wide shadow-xl hover:from-sky-500 hover:to-blue-800 hover:scale-105 active:scale-95 transition-all duration-200">
-                      <span className="truncate">Find Elections Now</span>
+                      <span className="truncate">Elections Now</span>
                     </Link>
                   </div>
                 </div>

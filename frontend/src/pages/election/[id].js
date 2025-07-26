@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import Head from "next/head";
@@ -12,6 +12,8 @@ export default function ElectionDetails() {
   const [showCandidateProfile, setShowCandidateProfile] = useState(false);
   const [selectedCandidateProfile, setSelectedCandidateProfile] = useState(null);
   const [activeTab, setActiveTab] = useState('overview');
+  const [timeRemaining, setTimeRemaining] = useState("Calculating...");
+  const [isClient, setIsClient] = useState(false);
 
   const handleViewProfile = (candidate) => {
     setSelectedCandidateProfile(candidate);
@@ -120,6 +122,8 @@ const [candidates, setcandidates]= useState(candidate)
   };
 
   const getTimeRemaining = () => {
+    if (!isClient) return "Calculating...";
+    
     const now = new Date();
     const endTime = new Date(election.endDate);
     const timeDiff = endTime - now;
@@ -132,10 +136,38 @@ const [candidates, setcandidates]= useState(candidate)
     return `${hours}h ${minutes}m remaining`;
   };
 
+  useEffect(() => {
+    setIsClient(true);
+    
+    const updateTimeRemaining = () => {
+      const now = new Date();
+      const endTime = new Date(election.endDate);
+      const timeDiff = endTime - now;
+      
+      if (timeDiff <= 0) {
+        setTimeRemaining("Election ended");
+        return;
+      }
+      
+      const hours = Math.floor(timeDiff / (1000 * 60 * 60));
+      const minutes = Math.floor((timeDiff % (1000 * 60 * 60)) / (1000 * 60));
+      
+      setTimeRemaining(`${hours}h ${minutes}m remaining`);
+    };
+
+    // Update immediately
+    updateTimeRemaining();
+    
+    // Update every minute
+    const interval = setInterval(updateTimeRemaining, 60000);
+    
+    return () => clearInterval(interval);
+  }, [election.endDate]);
+
   return (
     <>
       <Head>
-        <title>{election.title} - VoteWise</title>
+        <title>{`${election.title} - VoteWise`}</title>
         <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
       </Head>
       <div
@@ -221,7 +253,11 @@ const [candidates, setcandidates]= useState(candidate)
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
                     </svg>
                   </div>
-                  <span className="font-semibold">{new Date(election.startDate).toLocaleDateString()}</span>
+                  <span className="font-semibold">{new Date(election.startDate).toLocaleDateString('en-US', {
+                    year: 'numeric',
+                    month: 'short',
+                    day: 'numeric'
+                  })}</span>
                 </div>
                 <div className="flex items-center gap-2">
                   <div className="w-4 h-4 sm:w-5 sm:h-5 lg:w-6 lg:h-6 bg-gradient-to-r from-orange-500 to-red-600 rounded-full flex items-center justify-center">
@@ -229,7 +265,7 @@ const [candidates, setcandidates]= useState(candidate)
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
                     </svg>
                   </div>
-                  <span className="font-semibold">{getTimeRemaining()}</span>
+                  <span className="font-semibold">{timeRemaining}</span>
                 </div>
               </div>
             </div>
@@ -293,7 +329,11 @@ const [candidates, setcandidates]= useState(candidate)
                 <div className="bg-gradient-to-br from-blue-50 to-indigo-100 rounded-2xl p-6 shadow-lg">
                   <h3 className="text-xl sm:text-2xl font-bold text-slate-900 mb-4 sm:mb-6" style={{ fontFamily: "'Poppins', 'Inter', sans-serif" }}>Key Information</h3>
                   <ul className="space-y-3 sm:space-y-4 text-slate-800 text-base sm:text-lg">
-                    <li className="flex items-center gap-3"><span className="w-2 h-2 bg-blue-600 rounded-full"></span><strong>Election Date:</strong> {new Date(election.startDate).toLocaleDateString()}</li>
+                    <li className="flex items-center gap-3"><span className="w-2 h-2 bg-blue-600 rounded-full"></span><strong>Election Date:</strong> {new Date(election.startDate).toLocaleDateString('en-US', {
+                      year: 'numeric',
+                      month: 'short',
+                      day: 'numeric'
+                    })}</li>
                     <li className="flex items-center gap-3"><span className="w-2 h-2 bg-indigo-600 rounded-full"></span><strong>Voting Hours:</strong> 8:00 AM - 8:00 PM</li>
                     <li className="flex items-center gap-3"><span className="w-2 h-2 bg-purple-600 rounded-full"></span><strong>Organized by:</strong> {election.organizer}</li>
                     <li className="flex items-center gap-3"><span className="w-2 h-2 bg-pink-600 rounded-full"></span><strong>Type:</strong> {election.category} Election</li>
