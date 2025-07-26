@@ -82,12 +82,12 @@ export default function Home() {
               <a className="text-blue-700 text-base font-medium px-2 py-2 rounded transition-colors hover:text-blue-800 hover:bg-blue-50 focus:outline-none focus-visible:ring-2 focus-visible:ring-sky-400" href="#" onClick={() => setMenuOpen(false)}>How it works</a>
               <a className="text-blue-700 text-base font-medium px-2 py-2 rounded transition-colors hover:text-blue-800 hover:bg-blue-50 focus:outline-none focus-visible:ring-2 focus-visible:ring-sky-400" href="#" onClick={() => setMenuOpen(false)}>Security</a>
               <a className="text-blue-700 text-base font-medium px-2 py-2 rounded transition-colors hover:text-blue-800 hover:bg-blue-50 focus:outline-none focus-visible:ring-2 focus-visible:ring-sky-400" href="#" onClick={() => setMenuOpen(false)}>Help</a>
-              <button className="mt-2 flex w-full items-center justify-center overflow-hidden rounded-xl h-10 px-4 bg-gradient-to-r from-sky-400 via-blue-500 to-blue-700 text-white text-base font-semibold leading-normal tracking-wide shadow-lg hover:from-sky-500 hover:to-blue-800 hover:scale-105 active:scale-95 transition-all duration-200">
+              <Link href="/elections" className="mt-2 flex w-full items-center justify-center overflow-hidden rounded-xl h-10 px-4 bg-gradient-to-r from-sky-400 via-blue-500 to-blue-700 text-white text-base font-semibold leading-normal tracking-wide shadow-lg hover:from-sky-500 hover:to-blue-800 hover:scale-105 active:scale-95 transition-all duration-200" onClick={() => setMenuOpen(false)}>
                 Find Elections
-              </button>
-              <button className="mt-1 flex w-full items-center justify-center overflow-hidden rounded-xl h-10 px-4 bg-gradient-to-r from-blue-100 via-blue-200 to-blue-300 text-blue-800 text-base font-semibold leading-normal tracking-wide hover:bg-gradient-to-br hover:from-blue-200 hover:to-blue-400 shadow-md hover:scale-105 active:scale-95 transition-all duration-200">
+              </Link>
+              <Link href="/voter-auth" className="mt-1 flex w-full items-center justify-center overflow-hidden rounded-xl h-10 px-4 bg-gradient-to-r from-blue-100 via-blue-200 to-blue-300 text-blue-800 text-base font-semibold leading-normal tracking-wide hover:bg-gradient-to-br hover:from-blue-200 hover:to-blue-400 shadow-md hover:scale-105 active:scale-95 transition-all duration-200" onClick={() => setMenuOpen(false)}>
                 Vote
-              </button>
+              </Link>
             </div>
           </div>
         )}
@@ -114,9 +114,9 @@ export default function Home() {
                     <p className="text-blue-100 text-sm xs:text-base sm:text-lg md:text-xl font-medium leading-relaxed drop-shadow-md">
                       Participate in shaping the future by casting your vote in upcoming elections. Our platform ensures a secure and transparent voting process, making your voice heard.
                     </p>
-                    <button className="mt-4 flex min-w-[100px] xs:min-w-[120px] sm:min-w-[150px] max-w-[480px] cursor-pointer items-center justify-center overflow-hidden rounded-xl h-10 xs:h-11 sm:h-12 px-3 xs:px-4 sm:px-6 md:h-14 md:px-8 bg-gradient-to-r from-sky-400 via-blue-500 to-blue-700 text-white text-sm xs:text-base sm:text-lg font-bold leading-normal tracking-wide shadow-xl hover:from-sky-500 hover:to-blue-800 hover:scale-105 active:scale-95 transition-all duration-200">
+                    <Link href="/elections" className="mt-4 flex min-w-[100px] xs:min-w-[120px] sm:min-w-[150px] max-w-[480px] cursor-pointer items-center justify-center overflow-hidden rounded-xl h-10 xs:h-11 sm:h-12 px-3 xs:px-4 sm:px-6 md:h-14 md:px-8 bg-gradient-to-r from-sky-400 via-blue-500 to-blue-700 text-white text-sm xs:text-base sm:text-lg font-bold leading-normal tracking-wide shadow-xl hover:from-sky-500 hover:to-blue-800 hover:scale-105 active:scale-95 transition-all duration-200">
                       <span className="truncate">Find Elections Now</span>
-                    </button>
+                    </Link>
                   </div>
                 </div>
               </div>

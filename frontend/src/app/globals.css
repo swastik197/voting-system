@@ -148,3 +148,17 @@
 .animation-delay-4000 {
   animation-delay: 4s;
 }
+
+.animation-delay-6000 {
+  animation-delay: 6s;
+}
+
+/* Hide scrollbar for horizontal scrolling */
+.scrollbar-hide {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
+}

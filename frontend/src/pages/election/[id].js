@@ -189,42 +189,42 @@ export default function ElectionDetails() {
         </nav>
       </header>
 
-      <div className="flex-1 max-w-7xl mx-auto w-full px-4 sm:px-6 py-6 sm:py-8">
+      <div className="flex-1 max-w-7xl mx-auto w-full px-3 sm:px-4 lg:px-6 py-4 sm:py-6 lg:py-8">
         {/* Election Header */}
-        <div className="bg-white/95 backdrop-blur-xl rounded-3xl shadow-2xl shadow-slate-900/[0.1] border border-slate-200/60 p-6 sm:p-8 lg:p-10 mb-8 sm:mb-10">
-          <div className="flex flex-col xl:flex-row xl:items-center xl:justify-between gap-8">
+        <div className="bg-white/95 backdrop-blur-xl rounded-2xl sm:rounded-3xl shadow-2xl shadow-slate-900/[0.1] border border-slate-200/60 p-4 sm:p-6 lg:p-8 xl:p-10 mb-6 sm:mb-8 lg:mb-10">
+          <div className="flex flex-col xl:flex-row xl:items-center xl:justify-between gap-6 sm:gap-8">
             <div className="flex-1">
-              <div className="flex flex-wrap items-center gap-3 sm:gap-4 mb-6">
-                <span className="px-4 sm:px-5 py-2 sm:py-3 bg-gradient-to-r from-emerald-500 to-green-600 text-white rounded-2xl text-sm sm:text-base font-bold shadow-lg shadow-emerald-500/25">
+              <div className="flex flex-wrap items-center gap-2 sm:gap-3 lg:gap-4 mb-4 sm:mb-6">
+                <span className="px-3 sm:px-4 lg:px-5 py-1.5 sm:py-2 lg:py-3 bg-gradient-to-r from-emerald-500 to-green-600 text-white rounded-xl sm:rounded-2xl text-xs sm:text-sm lg:text-base font-bold shadow-lg shadow-emerald-500/25">
                   ● ACTIVE
                 </span>
-                <span className="px-4 sm:px-5 py-2 sm:py-3 bg-gradient-to-r from-blue-500 to-indigo-600 text-white rounded-2xl text-sm sm:text-base font-bold capitalize shadow-lg shadow-blue-500/25">
+                <span className="px-3 sm:px-4 lg:px-5 py-1.5 sm:py-2 lg:py-3 bg-gradient-to-r from-blue-500 to-indigo-600 text-white rounded-xl sm:rounded-2xl text-xs sm:text-sm lg:text-base font-bold capitalize shadow-lg shadow-blue-500/25">
                   {election.category}
                 </span>
               </div>
-              <h1 className="text-3xl sm:text-4xl lg:text-5xl font-black text-slate-900 mb-4 sm:mb-6 leading-tight" style={{ fontFamily: "'Poppins', 'Inter', sans-serif" }}>{election.title}</h1>
-              <p className="text-slate-700 text-lg sm:text-xl leading-relaxed mb-6 font-medium">{election.description}</p>
-              <div className="flex flex-wrap gap-4 sm:gap-6 text-sm sm:text-base text-slate-600">
-                <div className="flex items-center gap-2 sm:gap-3">
-                  <div className="w-5 h-5 sm:w-6 sm:h-6 bg-gradient-to-r from-blue-500 to-indigo-600 rounded-full flex items-center justify-center">
-                    <svg className="w-3 h-3 sm:w-4 sm:h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <h1 className="text-2xl sm:text-3xl lg:text-4xl xl:text-5xl font-black text-slate-900 mb-3 sm:mb-4 lg:mb-6 leading-tight" style={{ fontFamily: "'Poppins', 'Inter', sans-serif" }}>{election.title}</h1>
+              <p className="text-slate-700 text-base sm:text-lg lg:text-xl leading-relaxed mb-4 sm:mb-6 font-medium">{election.description}</p>
+              <div className="flex flex-wrap gap-3 sm:gap-4 lg:gap-6 text-xs sm:text-sm lg:text-base text-slate-600">
+                <div className="flex items-center gap-2">
+                  <div className="w-4 h-4 sm:w-5 sm:h-5 lg:w-6 lg:h-6 bg-gradient-to-r from-blue-500 to-indigo-600 rounded-full flex items-center justify-center">
+                    <svg className="w-2 h-2 sm:w-3 sm:h-3 lg:w-4 lg:h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
                     </svg>
                   </div>
                   <span className="font-semibold">{election.location}</span>
                 </div>
-                <div className="flex items-center gap-2 sm:gap-3">
-                  <div className="w-5 h-5 sm:w-6 sm:h-6 bg-gradient-to-r from-purple-500 to-pink-600 rounded-full flex items-center justify-center">
-                    <svg className="w-3 h-3 sm:w-4 sm:h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <div className="flex items-center gap-2">
+                  <div className="w-4 h-4 sm:w-5 sm:h-5 lg:w-6 lg:h-6 bg-gradient-to-r from-purple-500 to-pink-600 rounded-full flex items-center justify-center">
+                    <svg className="w-2 h-2 sm:w-3 sm:h-3 lg:w-4 lg:h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
                     </svg>
                   </div>
                   <span className="font-semibold">{new Date(election.startDate).toLocaleDateString()}</span>
                 </div>
-                <div className="flex items-center gap-2 sm:gap-3">
-                  <div className="w-5 h-5 sm:w-6 sm:h-6 bg-gradient-to-r from-orange-500 to-red-600 rounded-full flex items-center justify-center">
-                    <svg className="w-3 h-3 sm:w-4 sm:h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <div className="flex items-center gap-2">
+                  <div className="w-4 h-4 sm:w-5 sm:h-5 lg:w-6 lg:h-6 bg-gradient-to-r from-orange-500 to-red-600 rounded-full flex items-center justify-center">
+                    <svg className="w-2 h-2 sm:w-3 sm:h-3 lg:w-4 lg:h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
                     </svg>
                   </div>
@@ -234,20 +234,20 @@ export default function ElectionDetails() {
             </div>
             
             {/* Voting Stats */}
-            <div className="bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-100 rounded-3xl p-6 sm:p-8 w-full xl:min-w-96 xl:max-w-sm shadow-2xl shadow-slate-900/[0.08] border border-slate-200/60">
-              <h3 className="text-lg sm:text-xl font-bold text-slate-900 mb-6" style={{ fontFamily: "'Poppins', 'Inter', sans-serif" }}>Voting Statistics</h3>
-              <div className="space-y-5">
-                <div className="flex justify-between items-center text-base sm:text-lg">
+            <div className="bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-100 rounded-2xl sm:rounded-3xl p-4 sm:p-6 lg:p-8 w-full xl:min-w-80 xl:max-w-sm shadow-2xl shadow-slate-900/[0.08] border border-slate-200/60">
+              <h3 className="text-base sm:text-lg lg:text-xl font-bold text-slate-900 mb-4 sm:mb-6" style={{ fontFamily: "'Poppins', 'Inter', sans-serif" }}>Voting Statistics</h3>
+              <div className="space-y-3 sm:space-y-4 lg:space-y-5">
+                <div className="flex justify-between items-center text-sm sm:text-base lg:text-lg">
                   <span className="text-slate-700 font-medium">Registered Voters:</span>
-                  <span className="font-bold text-slate-900 text-xl">{election.registeredVoters.toLocaleString()}</span>
+                  <span className="font-bold text-slate-900 text-base sm:text-lg lg:text-xl">{election.registeredVoters.toLocaleString()}</span>
                 </div>
-                <div className="flex justify-between items-center text-base sm:text-lg">
+                <div className="flex justify-between items-center text-sm sm:text-base lg:text-lg">
                   <span className="text-slate-700 font-medium">Votes Cast:</span>
-                  <span className="font-bold text-emerald-700 text-xl">{election.votescast.toLocaleString()}</span>
+                  <span className="font-bold text-emerald-700 text-base sm:text-lg lg:text-xl">{election.votescast.toLocaleString()}</span>
                 </div>
-                <div className="flex justify-between items-center text-base sm:text-lg">
+                <div className="flex justify-between items-center text-sm sm:text-base lg:text-lg">
                   <span className="text-slate-700 font-medium">Turnout Rate:</span>
-                  <span className="font-bold text-indigo-700 text-xl">{election.turnoutRate}%</span>
+                  <span className="font-bold text-indigo-700 text-base sm:text-lg lg:text-xl">{election.turnoutRate}%</span>
                 </div>
                 <div className="w-full bg-slate-200 rounded-full h-3 mt-4">
                   <div 
@@ -264,12 +264,12 @@ export default function ElectionDetails() {
         </div>
 
         {/* Tab Navigation */}
-        <div className="flex overflow-x-auto gap-2 mb-8 sm:mb-10 bg-white/90 backdrop-blur-xl rounded-2xl p-2 shadow-xl shadow-slate-900/[0.05] border border-slate-200/60">
+        <div className="flex overflow-x-auto scrollbar-hide gap-1 sm:gap-2 mb-6 sm:mb-8 lg:mb-10 bg-white/90 backdrop-blur-xl rounded-xl sm:rounded-2xl p-1.5 sm:p-2 shadow-xl shadow-slate-900/[0.05] border border-slate-200/60">
           {['overview', 'candidates', 'results', 'info'].map((tab) => (
             <button
               key={tab}
               onClick={() => setActiveTab(tab)}
-              className={`flex-shrink-0 px-6 sm:px-8 py-3 sm:py-4 rounded-xl font-bold transition-all capitalize text-base sm:text-lg whitespace-nowrap ${
+              className={`flex-shrink-0 px-3 sm:px-6 lg:px-8 py-2 sm:py-3 lg:py-4 rounded-lg sm:rounded-xl font-bold transition-all capitalize text-sm sm:text-base lg:text-lg whitespace-nowrap min-w-0 ${
                 activeTab === tab
                   ? 'bg-gradient-to-r from-blue-600 via-indigo-600 to-purple-600 text-white shadow-2xl shadow-blue-600/30 transform scale-105'
                   : 'text-slate-700 hover:bg-slate-100 hover:text-slate-900'
@@ -313,13 +313,13 @@ export default function ElectionDetails() {
         )}
 
         {activeTab === 'candidates' && (
-          <div className="space-y-6 sm:space-y-8">
+          <div className="space-y-4 sm:space-y-6 lg:space-y-8">
             {candidates.map((candidate) => (
-              <div key={candidate.id} className="bg-white/95 backdrop-blur-xl rounded-3xl shadow-2xl shadow-slate-900/[0.1] border border-slate-200/60 p-6 sm:p-8 lg:p-10 hover:shadow-3xl hover:shadow-slate-900/[0.15] transition-all duration-300">
-                <div className="flex flex-col lg:flex-row gap-6 sm:gap-8 lg:gap-10">
+              <div key={candidate.id} className="bg-white/95 backdrop-blur-xl rounded-2xl sm:rounded-3xl shadow-2xl shadow-slate-900/[0.1] border border-slate-200/60 p-4 sm:p-6 lg:p-8 xl:p-10 hover:shadow-3xl hover:shadow-slate-900/[0.15] transition-all duration-300">
+                <div className="flex flex-col sm:flex-row lg:flex-row gap-4 sm:gap-6 lg:gap-8 xl:gap-10">
                   {/* Candidate Photo */}
-                  <div className="flex-shrink-0 flex justify-center lg:justify-start">
-                    <div className="relative w-32 h-32 sm:w-40 sm:h-40 rounded-3xl overflow-hidden shadow-2xl shadow-slate-900/[0.2] ring-4 ring-white">
+                  <div className="flex-shrink-0 flex justify-center sm:justify-start">
+                    <div className="relative w-24 h-24 sm:w-32 sm:h-32 lg:w-40 lg:h-40 rounded-2xl sm:rounded-3xl overflow-hidden shadow-2xl shadow-slate-900/[0.2] ring-2 sm:ring-4 ring-white">
                       <img 
                         src={candidate.photo} 
                         alt={candidate.name}
@@ -329,52 +329,52 @@ export default function ElectionDetails() {
                           e.target.nextSibling.style.display = 'flex';
                         }}
                       />
-                      <div className="w-32 h-32 sm:w-40 sm:h-40 bg-gradient-to-br from-slate-100 via-blue-100 to-indigo-200 rounded-3xl flex items-center justify-center" style={{display: 'none'}}>
-                        <svg className="w-16 h-16 sm:w-20 sm:h-20 text-slate-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <div className="w-24 h-24 sm:w-32 sm:h-32 lg:w-40 lg:h-40 bg-gradient-to-br from-slate-100 via-blue-100 to-indigo-200 rounded-2xl sm:rounded-3xl flex items-center justify-center" style={{display: 'none'}}>
+                        <svg className="w-10 h-10 sm:w-16 sm:h-16 lg:w-20 lg:h-20 text-slate-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
                         </svg>
                       </div>
                       {/* Candidate rank overlay */}
-                      <div className="absolute -top-2 -right-2 w-8 h-8 bg-gradient-to-r from-yellow-400 to-orange-500 rounded-full flex items-center justify-center shadow-lg">
-                        <span className="text-white font-black text-sm">#{candidates.findIndex(c => c.id === candidate.id) + 1}</span>
+                      <div className="absolute -top-1 -right-1 sm:-top-2 sm:-right-2 w-6 h-6 sm:w-8 sm:h-8 bg-gradient-to-r from-yellow-400 to-orange-500 rounded-full flex items-center justify-center shadow-lg">
+                        <span className="text-white font-black text-xs sm:text-sm">#{candidates.findIndex(c => c.id === candidate.id) + 1}</span>
                       </div>
                     </div>
                   </div>
 
                   {/* Candidate Info */}
-                  <div className="flex-1 text-center lg:text-left">
-                    <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between mb-6">
-                      <div className="mb-4 sm:mb-0">
-                        <h3 className="text-2xl sm:text-3xl font-black text-slate-900 mb-3" style={{ fontFamily: "'Poppins', 'Inter', sans-serif" }}>{candidate.name}</h3>
-                        <div className="flex flex-wrap justify-center lg:justify-start gap-3 mb-4">
-                          <span className="px-4 sm:px-5 py-2 bg-gradient-to-r from-blue-500 to-indigo-600 text-white rounded-2xl text-sm sm:text-base font-bold shadow-lg shadow-blue-500/25">
+                  <div className="flex-1 text-center sm:text-left">
+                    <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between mb-4 sm:mb-6">
+                      <div className="mb-3 sm:mb-0">
+                        <h3 className="text-xl sm:text-2xl lg:text-3xl font-black text-slate-900 mb-2 sm:mb-3" style={{ fontFamily: "'Poppins', 'Inter', sans-serif" }}>{candidate.name}</h3>
+                        <div className="flex flex-wrap justify-center sm:justify-start gap-2 sm:gap-3 mb-3 sm:mb-4">
+                          <span className="px-3 sm:px-4 lg:px-5 py-1.5 sm:py-2 bg-gradient-to-r from-blue-500 to-indigo-600 text-white rounded-xl sm:rounded-2xl text-xs sm:text-sm lg:text-base font-bold shadow-lg shadow-blue-500/25">
                             {candidate.party}
                           </span>
-                          <span className="px-4 sm:px-5 py-2 bg-gradient-to-r from-purple-500 to-pink-600 text-white rounded-2xl text-sm sm:text-base font-bold shadow-lg shadow-purple-500/25">
+                          <span className="px-3 sm:px-4 lg:px-5 py-1.5 sm:py-2 bg-gradient-to-r from-purple-500 to-pink-600 text-white rounded-xl sm:rounded-2xl text-xs sm:text-sm lg:text-base font-bold shadow-lg shadow-purple-500/25">
                             Age {candidate.age}
                           </span>
                         </div>
                       </div>
                       <div className="text-center sm:text-right">
-                        <div className="text-2xl sm:text-3xl font-black text-emerald-700">{candidate.votes.toLocaleString()}</div>
-                        <div className="text-sm sm:text-base text-slate-600 font-semibold">votes ({candidate.percentage}%)</div>
-                        <div className="w-20 sm:w-24 h-2 bg-slate-200 rounded-full mt-2 mx-auto sm:mx-0">
+                        <div className="text-xl sm:text-2xl lg:text-3xl font-black text-emerald-700">{candidate.votes.toLocaleString()}</div>
+                        <div className="text-xs sm:text-sm lg:text-base text-slate-600 font-semibold">votes ({candidate.percentage}%)</div>
+                        <div className="w-16 sm:w-20 lg:w-24 h-1.5 sm:h-2 bg-slate-200 rounded-full mt-2 mx-auto sm:mx-0">
                           <div 
-                            className="h-2 bg-gradient-to-r from-emerald-500 to-green-600 rounded-full transition-all duration-500"
+                            className="h-1.5 sm:h-2 bg-gradient-to-r from-emerald-500 to-green-600 rounded-full transition-all duration-500"
                             style={{ width: `${candidate.percentage}%` }}
                           ></div>
                         </div>
                       </div>
                     </div>
 
-                    <p className="text-slate-700 mb-6 text-base sm:text-lg leading-relaxed font-medium">{candidate.bio}</p>
+                    <p className="text-slate-700 mb-4 sm:mb-6 text-sm sm:text-base lg:text-lg leading-relaxed font-medium">{candidate.bio}</p>
 
                     {/* Platform */}
-                    <div className="mb-6 sm:mb-8">
-                      <h4 className="font-bold text-slate-900 mb-4 text-base sm:text-lg" style={{ fontFamily: "'Poppins', 'Inter', sans-serif" }}>Key Platform Points:</h4>
-                      <div className="flex flex-wrap justify-center lg:justify-start gap-2 sm:gap-3">
+                    <div className="mb-4 sm:mb-6 lg:mb-8">
+                      <h4 className="font-bold text-slate-900 mb-3 sm:mb-4 text-sm sm:text-base lg:text-lg" style={{ fontFamily: "'Poppins', 'Inter', sans-serif" }}>Key Platform Points:</h4>
+                      <div className="flex flex-wrap justify-center sm:justify-start gap-1.5 sm:gap-2 lg:gap-3">
                         {candidate.platform.map((point, index) => (
-                          <span key={index} className="px-3 sm:px-4 py-2 bg-gradient-to-r from-green-500 to-emerald-600 text-white rounded-xl text-sm sm:text-base font-semibold shadow-lg shadow-green-500/25">
+                          <span key={index} className="px-2.5 sm:px-3 lg:px-4 py-1.5 sm:py-2 bg-gradient-to-r from-green-500 to-emerald-600 text-white rounded-lg sm:rounded-xl text-xs sm:text-sm lg:text-base font-semibold shadow-lg shadow-green-500/25">
                             {point}
                           </span>
                         ))}
@@ -382,20 +382,20 @@ export default function ElectionDetails() {
                     </div>
 
                     {/* Action Buttons */}
-                    <div className="flex flex-col sm:flex-row flex-wrap gap-3 sm:gap-4 justify-center lg:justify-start">
+                    <div className="flex flex-col xs:flex-row gap-2 sm:gap-3 lg:gap-4 justify-center sm:justify-start">
                       <button 
                         onClick={() => handleVote(candidate.id)}
-                        className="w-full sm:w-auto px-6 sm:px-8 py-3 sm:py-4 bg-gradient-to-r from-blue-600 via-indigo-600 to-purple-600 text-white rounded-2xl font-bold hover:shadow-2xl hover:shadow-blue-600/30 transition-all duration-200 text-base sm:text-lg transform hover:scale-105"
+                        className="flex-1 xs:flex-none px-4 sm:px-6 lg:px-8 py-2.5 sm:py-3 lg:py-4 bg-gradient-to-r from-blue-600 via-indigo-600 to-purple-600 text-white rounded-xl sm:rounded-2xl font-bold hover:shadow-2xl hover:shadow-blue-600/30 transition-all duration-200 text-sm sm:text-base lg:text-lg transform hover:scale-105"
                         style={{ fontFamily: "'Poppins', 'Inter', sans-serif" }}
                       >
                         Vote for {candidate.name.split(' ')[0]}
                       </button>
                       <button 
                         onClick={() => handleViewProfile(candidate)}
-                        className="w-full sm:w-auto px-6 sm:px-8 py-3 sm:py-4 bg-slate-100 text-slate-800 rounded-2xl font-bold hover:bg-slate-200 hover:shadow-xl transition-all duration-200 text-base sm:text-lg"
+                        className="flex-1 xs:flex-none px-4 sm:px-6 lg:px-8 py-2.5 sm:py-3 lg:py-4 bg-slate-100 text-slate-800 rounded-xl sm:rounded-2xl font-bold hover:bg-slate-200 hover:shadow-xl transition-all duration-200 text-sm sm:text-base lg:text-lg"
                         style={{ fontFamily: "'Poppins', 'Inter', sans-serif" }}
                       >
-                        View Full Profile
+                        View Profile
                       </button>
                       {candidate.website && (
                         <a 
