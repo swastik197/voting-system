@@ -67,9 +67,9 @@ export default function CandidateRegister() {
 
       {/* Header */}
       <header className="sticky top-0 z-30 w-full bg-white/80 backdrop-blur border-b border-blue-200 shadow-sm">
-        <nav className="max-w-screen-xl mx-auto flex items-center justify-between px-6 py-4">
-          <div className="flex items-center gap-3 text-blue-700">
-            <div className="size-10 text-sky-500">
+        <nav className="max-w-screen-xl mx-auto flex flex-col sm:flex-row items-center justify-between px-4 sm:px-6 py-3 sm:py-4 gap-2">
+          <div className="flex items-center gap-2 sm:gap-3 text-blue-700">
+            <div className="size-8 sm:size-10 text-sky-500">
               <svg fill="none" viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg">
                 <defs>
                   <linearGradient id="logo-gradient" x1="0" y1="0" x2="1" y2="1">
@@ -80,10 +80,9 @@ export default function CandidateRegister() {
                 <path clipRule="evenodd" d="M24 4H42V17.3333V30.6667H24V44H6V30.6667V17.3333H24V4Z" fill="url(#logo-gradient)" fillRule="evenodd"></path>
               </svg>
             </div>
-            <span className="text-blue-900 text-2xl font-extrabold leading-tight tracking-[-0.015em]">VoteWise</span>
+            <span className="text-blue-900 text-xl sm:text-2xl font-extrabold leading-tight tracking-[-0.015em]">VoteWise</span>
           </div>
-          
-          <div className="flex items-center gap-6">
+          <div className="flex items-center gap-4 sm:gap-6">
             <Link href="/dashboard" className="text-blue-700 hover:text-blue-900 font-medium">Dashboard</Link>
             <Link href="/candidate-profile" className="text-blue-700 hover:text-blue-900 font-medium">Profile</Link>
             <Link href="/" className="text-blue-700 hover:text-blue-900 font-medium">Home</Link>
@@ -91,16 +90,16 @@ export default function CandidateRegister() {
         </nav>
       </header>
 
-      <div className="flex-1 max-w-4xl mx-auto w-full px-6 py-8">
+      <div className="flex-1 max-w-4xl mx-auto w-full px-3 sm:px-6 py-6 sm:py-8">
         {/* Title */}
-        <div className="text-center mb-8">
-          <h1 className="text-4xl font-bold text-blue-900 mb-2">Candidate Registration</h1>
-          <p className="text-blue-600">Join the democratic process and represent your community</p>
+        <div className="text-center mb-6 sm:mb-8">
+          <h1 className="text-3xl sm:text-4xl font-bold text-blue-900 mb-2">Candidate Registration</h1>
+          <p className="text-blue-600 text-base sm:text-lg">Join the democratic process and represent your community</p>
         </div>
 
         {/* Progress Indicator */}
-        <div className="mb-8">
-          <div className="flex items-center justify-center gap-4">
+        <div className="mb-6 sm:mb-8">
+          <div className="flex flex-wrap items-center justify-center gap-2 sm:gap-4">
             {[1, 2, 3].map((step) => (
               <div key={step} className="flex items-center">
                 <div className={`w-10 h-10 rounded-full flex items-center justify-center font-semibold ${
@@ -118,7 +117,7 @@ export default function CandidateRegister() {
               </div>
             ))}
           </div>
-          <div className="flex justify-center gap-24 mt-3">
+          <div className="flex flex-wrap justify-center gap-8 sm:gap-24 mt-2 sm:mt-3">
             <span className={`text-sm font-medium ${currentStep >= 1 ? 'text-blue-600' : 'text-gray-500'}`}>
               Personal Info
             </span>
@@ -132,15 +131,15 @@ export default function CandidateRegister() {
         </div>
 
         {/* Form */}
-        <div className="bg-white/80 backdrop-blur rounded-2xl shadow-sm border border-blue-200 p-8">
+        <div className="bg-white/80 backdrop-blur rounded-xl sm:rounded-2xl shadow-sm border border-blue-200 p-4 sm:p-8">
           <form onSubmit={handleSubmit}>
             {/* Step 1: Personal Information */}
             {currentStep === 1 && (
-              <div className="space-y-6">
-                <h2 className="text-2xl font-bold text-blue-900 mb-6">Personal Information</h2>
+              <div className="space-y-4 sm:space-y-6">
+                <h2 className="text-xl sm:text-2xl font-bold text-blue-900 mb-4 sm:mb-6">Personal Information</h2>
                 
                 {/* Photo Upload */}
-                <div className="flex items-start gap-6">
+                <div className="flex flex-col sm:flex-row items-start gap-4 sm:gap-6">
                   <div className="flex-shrink-0">
                     <div className="w-24 h-24 bg-gradient-to-br from-blue-100 to-blue-200 rounded-xl flex items-center justify-center">
                       {formData.photo ? (
@@ -169,7 +168,7 @@ export default function CandidateRegister() {
                   </div>
                 </div>
 
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6">
                   <div>
                     <label htmlFor="fullName" className="block text-blue-900 font-semibold mb-2">
                       Full Name *
@@ -203,7 +202,7 @@ export default function CandidateRegister() {
                   </div>
                 </div>
 
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6">
                   <div>
                     <label htmlFor="email" className="block text-blue-900 font-semibold mb-2">
                       Email Address *
@@ -236,7 +235,7 @@ export default function CandidateRegister() {
                   </div>
                 </div>
 
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6">
                   <div>
                     <label htmlFor="party" className="block text-blue-900 font-semibold mb-2">
                       Political Party
@@ -276,8 +275,8 @@ export default function CandidateRegister() {
 
             {/* Step 2: Background Information */}
             {currentStep === 2 && (
-              <div className="space-y-6">
-                <h2 className="text-2xl font-bold text-blue-900 mb-6">Background Information</h2>
+              <div className="space-y-4 sm:space-y-6">
+                <h2 className="text-xl sm:text-2xl font-bold text-blue-900 mb-4 sm:mb-6">Background Information</h2>
                 
                 <div>
                   <label htmlFor="bio" className="block text-blue-900 font-semibold mb-2">
@@ -326,7 +325,7 @@ export default function CandidateRegister() {
                 </div>
 
                 {/* Terms and Conditions */}
-                <div className="bg-blue-50/50 rounded-xl p-6">
+                <div className="bg-blue-50/50 rounded-xl p-4 sm:p-6">
                   <h3 className="text-lg font-semibold text-blue-900 mb-4">Candidate Agreement</h3>
                   <div className="space-y-3">
                     <label className="flex items-start gap-3">
@@ -348,11 +347,11 @@ export default function CandidateRegister() {
 
             {/* Step 3: Review */}
             {currentStep === 3 && (
-              <div className="space-y-6">
-                <h2 className="text-2xl font-bold text-blue-900 mb-6">Review Your Information</h2>
+              <div className="space-y-4 sm:space-y-6">
+                <h2 className="text-xl sm:text-2xl font-bold text-blue-900 mb-4 sm:mb-6">Review Your Information</h2>
                 
-                <div className="bg-blue-50/50 rounded-xl p-6">
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div className="bg-blue-50/50 rounded-xl p-4 sm:p-6">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6">
                     <div>
                       <h3 className="font-semibold text-blue-900 mb-2">Personal Information</h3>
                       <div className="space-y-2 text-blue-800">
@@ -376,7 +375,7 @@ export default function CandidateRegister() {
                   </div>
                 </div>
 
-                <div className="bg-green-50 border border-green-200 rounded-xl p-6">
+                <div className="bg-green-50 border border-green-200 rounded-xl p-4 sm:p-6">
                   <div className="flex items-start gap-3">
                     <svg className="w-6 h-6 text-green-600 mt-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
@@ -394,11 +393,11 @@ export default function CandidateRegister() {
             )}
 
             {/* Navigation Buttons */}
-            <div className="flex justify-between pt-8 mt-8 border-t border-blue-100">
+            <div className="flex flex-col sm:flex-row justify-between pt-6 sm:pt-8 mt-6 sm:mt-8 border-t border-blue-100 gap-4">
               <button
                 type="button"
                 onClick={handlePrevious}
-                className={`px-8 py-3 rounded-xl font-medium transition-all ${
+                className={`px-6 sm:px-8 py-2 sm:py-3 rounded-xl font-medium transition-all ${
                   currentStep === 1 
                     ? 'bg-gray-100 text-gray-400 cursor-not-allowed' 
                     : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
@@ -410,7 +409,7 @@ export default function CandidateRegister() {
               
               <button
                 type="submit"
-                className="px-8 py-3 bg-gradient-to-r from-sky-500 to-blue-600 text-white rounded-xl font-medium hover:shadow-lg transition-all"
+                className="px-6 sm:px-8 py-2 sm:py-3 bg-gradient-to-r from-sky-500 to-blue-600 text-white rounded-xl font-medium hover:shadow-lg transition-all"
               >
                 {currentStep === totalSteps ? 'Submit Registration' : 'Next Step'}
               </button>

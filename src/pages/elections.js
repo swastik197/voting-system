@@ -47,7 +47,7 @@ export default function Elections() {
       {/* Header */}
       <header className="sticky top-0 z-50 backdrop-blur-xl bg-white/80 border-b border-white/20 shadow-lg">
         <nav className="max-w-7xl mx-auto px-3 sm:px-4 lg:px-6 py-3 sm:py-4">
-          <div className="flex items-center justify-between">
+          <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
             <Link href="/" className="flex items-center space-x-2 sm:space-x-3 group">
               <div className="relative">
                 <div className="w-8 h-8 sm:w-10 sm:h-10 bg-gradient-to-br from-blue-500 via-indigo-600 to-purple-600 rounded-lg sm:rounded-xl flex items-center justify-center shadow-lg group-hover:shadow-xl transition-all duration-300">
@@ -62,14 +62,12 @@ export default function Elections() {
               </div>
               <span className="text-lg sm:text-xl lg:text-2xl font-bold bg-gradient-to-r from-blue-600 via-indigo-600 to-purple-600 bg-clip-text text-transparent">VoteWise</span>
             </Link>
-            
-            {/* Desktop Navigation */}
-            <div className="hidden md:flex items-center space-x-4 lg:space-x-6">
+            <div className="flex flex-col sm:flex-row items-start sm:items-center gap-3 sm:gap-6">
+              {/* Desktop Navigation */}
               <Link href="/dashboard" className="text-gray-700 hover:text-blue-600 font-medium transition-colors duration-200 text-sm lg:text-base">Dashboard</Link>
               <Link href="/admin" className="text-gray-700 hover:text-blue-600 font-medium transition-colors duration-200 text-sm lg:text-base">Admin</Link>
               <Link href="/voter-auth" className="px-3 lg:px-4 py-2 bg-gradient-to-r from-blue-500 via-indigo-600 to-purple-600 text-white rounded-lg hover:shadow-lg transition-all duration-200 text-sm lg:text-base font-medium">Login</Link>
             </div>
-
             {/* Mobile Menu Button */}
             <button className="md:hidden p-2 rounded-lg text-gray-700 hover:bg-gray-100 transition-colors">
               <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">

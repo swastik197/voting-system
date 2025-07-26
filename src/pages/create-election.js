@@ -49,7 +49,7 @@ export default function CreateElection() {
 
       {/* Header */}
       <header className="sticky top-0 z-30 w-full bg-white/80 backdrop-blur border-b border-blue-200 shadow-sm">
-        <nav className="max-w-screen-xl mx-auto flex items-center justify-between px-6 py-4">
+        <nav className="max-w-screen-xl mx-auto flex flex-col sm:flex-row items-start sm:items-center justify-between px-4 sm:px-6 py-4 gap-4">
           <div className="flex items-center gap-3 text-blue-700">
             <div className="size-10 text-sky-500">
               <svg fill="none" viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg">
@@ -65,23 +65,23 @@ export default function CreateElection() {
             <span className="text-blue-900 text-2xl font-extrabold leading-tight tracking-[-0.015em]">VoteWise</span>
           </div>
           
-          <div className="flex items-center gap-6">
+          <div className="flex flex-col sm:flex-row items-start sm:items-center gap-3 sm:gap-6">
             <Link href="/admin" className="text-blue-700 hover:text-blue-900 font-medium">← Back to Admin</Link>
             <Link href="/dashboard" className="text-blue-700 hover:text-blue-900 font-medium">Dashboard</Link>
           </div>
         </nav>
       </header>
 
-      <div className="flex-1 max-w-4xl mx-auto w-full px-6 py-8">
+      <div className="flex-1 max-w-4xl mx-auto w-full px-4 sm:px-6 py-8 sm:py-12">
         {/* Title */}
         <div className="mb-8">
-          <h1 className="text-4xl font-bold text-blue-900 mb-2">Create New Election</h1>
-          <p className="text-blue-600">Set up a new election with candidates and voting parameters</p>
+          <h1 className="text-3xl sm:text-4xl font-bold text-blue-900 mb-2">Create New Election</h1>
+          <p className="text-blue-600 text-base sm:text-lg">Set up a new election with candidates and voting parameters</p>
         </div>
 
         {/* Form */}
-        <div className="bg-white/80 backdrop-blur rounded-2xl shadow-sm border border-blue-200 p-8">
-          <form onSubmit={handleSubmit} className="space-y-6">
+        <div className="bg-white/80 backdrop-blur rounded-2xl shadow-sm border border-blue-200 p-4 sm:p-8">
+          <form onSubmit={handleSubmit} className="space-y-6 sm:space-y-8">
             {/* Election Title */}
             <div>
               <label htmlFor="title" className="block text-blue-900 font-semibold mb-2">
@@ -116,7 +116,7 @@ export default function CreateElection() {
             </div>
 
             {/* Date Range */}
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
               <div>
                 <label htmlFor="startDate" className="block text-blue-900 font-semibold mb-2">
                   Start Date *
@@ -148,7 +148,7 @@ export default function CreateElection() {
             </div>
 
             {/* Category and Visibility */}
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
               <div>
                 <label htmlFor="category" className="block text-blue-900 font-semibold mb-2">
                   Category
@@ -187,9 +187,9 @@ export default function CreateElection() {
             </div>
 
             {/* Election Rules */}
-            <div className="bg-blue-50/50 rounded-xl p-6">
+            <div className="bg-blue-50/50 rounded-xl p-4 sm:p-6">
               <h3 className="text-lg font-semibold text-blue-900 mb-4">Election Rules & Settings</h3>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <label className="flex items-center gap-3">
                   <input type="checkbox" defaultChecked className="w-4 h-4 text-blue-600 border-blue-300 rounded focus:ring-blue-500" />
                   <span className="text-blue-800">Allow vote changes</span>
@@ -210,16 +210,16 @@ export default function CreateElection() {
             </div>
 
             {/* Action Buttons */}
-            <div className="flex gap-4 pt-6">
+            <div className="flex flex-col sm:flex-row gap-4 pt-6">
               <button
                 type="button"
-                className="px-8 py-3 bg-gray-200 text-gray-700 rounded-xl font-medium hover:bg-gray-300 transition-colors"
+                className="w-full sm:w-auto px-8 py-3 bg-gray-200 text-gray-700 rounded-xl font-medium hover:bg-gray-300 transition-colors"
               >
                 Save as Draft
               </button>
               <button
                 type="submit"
-                className="flex-1 px-8 py-3 bg-gradient-to-r from-sky-500 to-blue-600 text-white rounded-xl font-medium hover:shadow-lg transition-all"
+                className="w-full sm:flex-1 px-8 py-3 bg-gradient-to-r from-sky-500 to-blue-600 text-white rounded-xl font-medium hover:shadow-lg transition-all"
               >
                 Create Election
               </button>
@@ -228,9 +228,9 @@ export default function CreateElection() {
         </div>
 
         {/* Help Section */}
-        <div className="mt-8 bg-blue-50/50 backdrop-blur rounded-2xl p-6 border border-blue-200">
+        <div className="mt-8 bg-blue-50/50 backdrop-blur rounded-2xl p-4 sm:p-6 border border-blue-200">
           <h3 className="text-lg font-semibold text-blue-900 mb-3">Need Help?</h3>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
             <div className="flex items-start gap-3">
               <div className="p-2 bg-blue-100 rounded-lg">
                 <svg className="w-5 h-5 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
