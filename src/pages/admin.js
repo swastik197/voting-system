@@ -287,28 +287,31 @@ export default function AdminPage() {
           </div>
 
           {/* Tab Navigation */}
-          <div className="flex flex-col sm:flex-row gap-2 mb-8 bg-white/60 backdrop-blur-xl rounded-2xl p-2 shadow-xl border border-white/20">
-            {[
-              { key: 'overview', label: 'Overview', icon: 'M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2H5a2 2 0 00-2-2v0' },
-              { key: 'elections', label: 'Manage Elections', icon: 'M9 5H7a2 2 0 00-2 2v10a2 2 0 002 2h8a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2' },
-              { key: 'candidates', label: 'Candidates', icon: 'M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z' },
-              { key: 'voters', label: 'Voters', icon: 'M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z' }
-            ].map((tab) => (
-              <button
-                key={tab.key}
-                onClick={() => setActiveTab(tab.key)}
-                className={`flex items-center w-full sm:w-auto px-6 py-4 rounded-xl font-semibold transition-all duration-200 ${
-                  activeTab === tab.key
-                    ? 'bg-gradient-to-r from-blue-500 to-purple-600 text-white shadow-lg'
-                    : 'text-gray-700 hover:bg-white/80 hover:shadow-md'
-                }`}
-              >
-                <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d={tab.icon} />
-                </svg>
-                {tab.label}
-              </button>
-            ))}
+          <div className="flex flex-col sm:flex-row gap-2 mb-8 bg-white/60 backdrop-blur-xl rounded-2xl p-2 shadow-xl border border-white/20 w-full overflow-x-auto">
+            <div className="flex flex-row w-full min-w-[320px] sm:min-w-0">
+              {[ 
+                { key: 'overview', label: 'Overview', icon: 'M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2H5a2 2 0 00-2-2v0' },
+                { key: 'elections', label: 'Manage Elections', icon: 'M9 5H7a2 2 0 00-2 2v10a2 2 0 002 2h8a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2' },
+                { key: 'candidates', label: 'Candidates', icon: 'M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z' },
+                { key: 'voters', label: 'Voters', icon: 'M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z' }
+              ].map((tab) => (
+                <button
+                  key={tab.key}
+                  onClick={() => setActiveTab(tab.key)}
+                  className={`flex items-center flex-1 min-w-[150px] px-4 sm:px-6 py-3 sm:py-4 rounded-xl font-semibold transition-all duration-200 whitespace-nowrap overflow-hidden text-ellipsis ${
+                    activeTab === tab.key
+                      ? 'bg-gradient-to-r from-blue-500 to-purple-600 text-white shadow-lg'
+                      : 'text-gray-700 hover:bg-white/80 hover:shadow-md'
+                  }`}
+                  style={{textOverflow: 'ellipsis'}}
+                >
+                  <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d={tab.icon} />
+                  </svg>
+                  <span className="truncate w-full">{tab.label}</span>
+                </button>
+              ))}
+            </div>
           </div>
 
           {/* Tab Content */}
@@ -316,34 +319,34 @@ export default function AdminPage() {
             <div className="space-y-8">
               {/* Recent Elections */}
               <div className="bg-white/70 backdrop-blur-xl rounded-2xl shadow-xl border border-white/20">
-                <div className="p-6 border-b border-gray-200">
-                  <h2 className="text-2xl font-bold text-gray-900">Recent Elections</h2>
-                  <p className="text-gray-600">Latest election activity and status</p>
+                <div className="p-4 sm:p-6 border-b border-gray-200">
+                  <h2 className="text-xl sm:text-2xl font-bold text-gray-900">Recent Elections</h2>
+                  <p className="text-gray-600 text-sm sm:text-base">Latest election activity and status</p>
                 </div>
-                <div className="p-6">
-                  <div className="space-y-4">
+                <div className="p-4 sm:p-6">
+                  <div className="space-y-3 sm:space-y-4">
                     {recentElections.map((election) => (
-                      <div key={election.id} className="p-4 bg-gradient-to-r from-blue-50 to-purple-50 rounded-xl border border-blue-200">
-                        <div className="flex items-center justify-between">
+                      <div key={election.id} className="p-3 sm:p-4 bg-gradient-to-r from-blue-50 to-purple-50 rounded-xl border border-blue-200">
+                        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
                           <div>
-                            <h3 className="text-lg font-semibold text-gray-900">{election.title}</h3>
-                            <div className="flex items-center gap-4 mt-2">
-                              <span className={`px-3 py-1 rounded-full text-sm font-semibold ${
+                            <h3 className="text-base sm:text-lg font-semibold text-gray-900">{election.title}</h3>
+                            <div className="flex flex-wrap items-center gap-2 sm:gap-4 mt-2">
+                              <span className={`px-2 sm:px-3 py-1 rounded-full text-xs sm:text-sm font-semibold ${
                                 election.status === 'active' ? 'bg-green-100 text-green-700' :
                                 election.status === 'upcoming' ? 'bg-blue-100 text-blue-700' :
                                 'bg-gray-100 text-gray-700'
                               }`}>
                                 {election.status}
                               </span>
-                              <span className="text-gray-600 text-sm">{election.voters.toLocaleString()} voters</span>
-                              <span className="text-gray-600 text-sm">{election.candidates} candidates</span>
+                              <span className="text-gray-600 text-xs sm:text-sm">{election.voters.toLocaleString()} voters</span>
+                              <span className="text-gray-600 text-xs sm:text-sm">{election.candidates} candidates</span>
                             </div>
                           </div>
-                          <div className="flex gap-2">
-                            <button className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors">
+                          <div className="flex gap-2 mt-2 sm:mt-0">
+                            <button className="px-3 sm:px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors text-xs sm:text-sm">
                               Manage
                             </button>
-                            <button className="px-4 py-2 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition-colors">
+                            <button className="px-3 sm:px-4 py-2 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition-colors text-xs sm:text-sm">
                               View
                             </button>
                           </div>
@@ -422,24 +425,24 @@ export default function AdminPage() {
           {activeTab === 'candidates' && (
             <div className="space-y-8">
               <div className="bg-white/70 backdrop-blur-xl rounded-2xl shadow-xl border border-white/20">
-                <div className="p-6 border-b border-gray-200">
-                  <h2 className="text-2xl font-bold text-gray-900">Candidate Management</h2>
-                  <p className="text-gray-600">Review and approve candidate registrations</p>
+                <div className="p-4 sm:p-6 border-b border-gray-200">
+                  <h2 className="text-xl sm:text-2xl font-bold text-gray-900">Candidate Management</h2>
+                  <p className="text-gray-600 text-sm sm:text-base">Review and approve candidate registrations</p>
                 </div>
-                <div className="p-6">
-                  <div className="space-y-4">
+                <div className="p-4 sm:p-6">
+                  <div className="space-y-3 sm:space-y-4">
                     {candidates.map((candidate) => (
-                      <div key={candidate.id} className="p-6 bg-gradient-to-r from-white to-gray-50 rounded-xl border border-gray-200 hover:shadow-md transition-all">
-                        <div className="flex items-center justify-between">
-                          <div className="flex items-center space-x-4">
-                            <div className="w-12 h-12 bg-gradient-to-br from-blue-400 to-purple-500 rounded-full flex items-center justify-center">
-                              <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <div key={candidate.id} className="p-3 sm:p-6 bg-gradient-to-r from-white to-gray-50 rounded-xl border border-gray-200 hover:shadow-md transition-all">
+                        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+                          <div className="flex items-center gap-2 sm:gap-4">
+                            <div className="w-10 h-10 sm:w-12 sm:h-12 bg-gradient-to-br from-blue-400 to-purple-500 rounded-full flex items-center justify-center">
+                              <svg className="w-5 h-5 sm:w-6 sm:h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
                               </svg>
                             </div>
                             <div>
-                              <h3 className="text-lg font-semibold text-gray-900">{candidate.name}</h3>
-                              <div className="flex items-center gap-3 text-sm text-gray-600">
+                              <h3 className="text-base sm:text-lg font-semibold text-gray-900">{candidate.name}</h3>
+                              <div className="flex flex-wrap items-center gap-2 sm:gap-3 text-xs sm:text-sm text-gray-600">
                                 <span>{candidate.party}</span>
                                 <span>•</span>
                                 <span>Age {candidate.age}</span>
@@ -448,18 +451,18 @@ export default function AdminPage() {
                               </div>
                             </div>
                           </div>
-                          <div className="flex items-center gap-3">
-                            <span className={`px-3 py-1 rounded-full text-sm font-semibold ${
+                          <div className="flex gap-2 sm:gap-3 mt-2 sm:mt-0">
+                            <span className={`px-2 sm:px-3 py-1 rounded-full text-xs sm:text-sm font-semibold ${
                               candidate.status === 'approved' ? 'bg-green-100 text-green-700 border border-green-200' :
                               'bg-yellow-100 text-yellow-700 border border-yellow-200'
                             }`}>
                               {candidate.status}
                             </span>
-                            <button className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors">
+                            <button className="px-3 sm:px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors text-xs sm:text-sm">
                               View Profile
                             </button>
                             {candidate.status === 'pending' && (
-                              <button className="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors">
+                              <button className="px-3 sm:px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors text-xs sm:text-sm">
                                 Approve
                               </button>
                             )}
@@ -474,56 +477,56 @@ export default function AdminPage() {
           )}
 
           {activeTab === 'voters' && (
-            <div className="space-y-8">
-              <div className="bg-white/70 backdrop-blur-xl rounded-2xl shadow-xl border border-white/20">
-                <div className="p-6 border-b border-gray-200">
-                  <h2 className="text-2xl font-bold text-gray-900">Voter Management</h2>
-                  <p className="text-gray-600">Verify voter registrations and manage voter database</p>
-                </div>
-                <div className="p-6">
-                  <div className="space-y-4">
-                    {voters.map((voter) => (
-                      <div key={voter.id} className="p-6 bg-gradient-to-r from-white to-blue-50 rounded-xl border border-blue-100 hover:shadow-md transition-all">
-                        <div className="flex items-center justify-between">
-                          <div className="flex items-center space-x-4">
-                            <div className="w-12 h-12 bg-gradient-to-br from-green-400 to-blue-500 rounded-full flex items-center justify-center">
-                              <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
-                              </svg>
-                            </div>
-                            <div>
-                              <h3 className="text-lg font-semibold text-gray-900">{voter.name}</h3>
-                              <div className="flex items-center gap-3 text-sm text-gray-600">
-                                <span>Age {voter.age}</span>
-                                <span>•</span>
-                                <span>Registered: {new Date(voter.registrationDate).toLocaleDateString()}</span>
-                              </div>
-                            </div>
-                          </div>
-                          <div className="flex items-center gap-3">
-                            <span className={`px-3 py-1 rounded-full text-sm font-semibold ${
-                              voter.status === 'Verified' ? 'bg-green-100 text-green-700 border border-green-200' :
-                              'bg-yellow-100 text-yellow-700 border border-yellow-200'
-                            }`}>
-                              {voter.status}
-                            </span>
-                            <button className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors">
-                              View Details
-                            </button>
-                            {voter.status === 'Pending' && (
-                              <button className="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors">
-                                Verify
-                              </button>
-                            )}
-                          </div>
-                        </div>
-                      </div>
-                    ))}
+  <div className="space-y-8">
+    <div className="bg-white/70 backdrop-blur-xl rounded-2xl shadow-xl border border-white/20">
+      <div className="p-4 sm:p-6 border-b border-gray-200">
+        <h2 className="text-xl sm:text-2xl font-bold text-gray-900">Voter Management</h2>
+        <p className="text-gray-600 text-sm sm:text-base">Verify voter registrations and manage voter database</p>
+      </div>
+      <div className="p-4 sm:p-6">
+        <div className="space-y-3 sm:space-y-4">
+          {voters.map((voter) => (
+            <div key={voter.id} className="p-3 sm:p-6 bg-gradient-to-r from-white to-blue-50 rounded-xl border border-blue-100 hover:shadow-md transition-all">
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+                <div className="flex items-center gap-2 sm:gap-4">
+                  <div className="w-10 h-10 sm:w-12 sm:h-12 bg-gradient-to-br from-green-400 to-blue-500 rounded-full flex items-center justify-center">
+                    <svg className="w-5 h-5 sm:w-6 sm:h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+                    </svg>
                   </div>
+                  <div>
+                    <h3 className="text-base sm:text-lg font-semibold text-gray-900">{voter.name}</h3>
+                    <div className="flex flex-wrap items-center gap-2 sm:gap-3 text-xs sm:text-sm text-gray-600">
+                      <span>Age {voter.age}</span>
+                      <span>•</span>
+                      <span>Registered: {new Date(voter.registrationDate).toLocaleDateString()}</span>
+                    </div>
+                  </div>
+                </div>
+                <div className="flex gap-2 sm:gap-3 mt-2 sm:mt-0">
+                  <span className={`px-2 sm:px-3 py-1 rounded-full text-xs sm:text-sm font-semibold ${
+                    voter.status === 'Verified' ? 'bg-green-100 text-green-700 border border-green-200' :
+                    'bg-yellow-100 text-yellow-700 border border-yellow-200'
+                  }`}>
+                    {voter.status}
+                  </span>
+                  <button className="px-3 sm:px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors text-xs sm:text-sm">
+                    View Details
+                  </button>
+                  {voter.status === 'Pending' && (
+                    <button className="px-3 sm:px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors text-xs sm:text-sm">
+                      Verify
+                    </button>
+                  )}
                 </div>
               </div>
             </div>
-          )}
+          ))}
+        </div>
+      </div>
+    </div>
+  </div>
+)}
         </div>
       </div>
 
