@@ -6,20 +6,11 @@ export default function CandidateProfile() {
   const [isEditing, setIsEditing] = useState(false);
   const [showPublicProfile, setShowPublicProfile] = useState(false);
 
-  // Sample candidate data (private - editable)
+  
   const [candidate, setCandidate] = useState(candidateInfo);
 const[currentElections, setcurrentElections] = useState(currentElection)
 const[suggestedElections, setsuggestedElections] = useState(suggestedElection)
-  // const currentElections = [
-  //   { id: 1, title: "Mayoral Election 2024", status: "Participating", votes: 1247, position: "Leading" },
-  //   { id: 2, title: "City Council Election", status: "Participating", votes: 892, position: "2nd Place" }
-  // ];
-
-  // const suggestedElections = [
-  //   { id: 3, title: "State Governor Election", deadline: "2024-03-15", category: "State", requirements: "State residency, 35+ years" },
-  //   { id: 4, title: "School Board Election", deadline: "2024-02-28", category: "Education", requirements: "Education background preferred" },
-  //   { id: 5, title: "County Commissioner", deadline: "2024-04-10", category: "Local", requirements: "Local residency, public service experience" }
-  // ];
+ 
 
   // Public Profile Modal Component
   const PublicProfileModal = () => (
