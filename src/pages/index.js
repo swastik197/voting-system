@@ -116,7 +116,7 @@ export default function Home() {
                     </p>
                     <Link href="/elections" className="mt-4 flex min-w-[100px] xs:min-w-[120px] sm:min-w-[150px] max-w-[480px] cursor-pointer items-center justify-center overflow-hidden rounded-xl h-10 xs:h-11 sm:h-12 px-3 xs:px-4 sm:px-6 md:h-14 md:px-8 bg-gradient-to-r from-sky-400 via-blue-500 to-blue-700 text-white text-sm xs:text-base sm:text-lg font-bold leading-normal tracking-wide shadow-xl hover:from-sky-500 hover:to-blue-800 hover:scale-105 active:scale-95 transition-all duration-200">
                       <span className="truncate">Elections Now</span>
-                    </Link>
+                    </Link> 
                   </div>
                 </div>
               </div>
