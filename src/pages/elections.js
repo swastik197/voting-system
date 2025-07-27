@@ -1,12 +1,23 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Link from "next/link";
-import {election} from "@/config/electionsCollection_Data";
+import { apiRequest } from "@/services/api";
+
 export default function Elections() {
   const [filter, setFilter] = useState('all');
   const [searchTerm, setSearchTerm] = useState('');
+  const [elections, setElections] = useState([]);
 
-  const[elections , setelections]= useState(election)
-  
+  useEffect(() => {
+    async function fetchElections() {
+      try {
+        const data = await apiRequest('/api/elections');
+        setElections(data);
+      } catch (err) {
+        setElections([]);
+      }
+    }
+    fetchElections();
+  }, []);
 
   const filteredElections = elections.filter(election => {
     const matchesFilter = filter === 'all' || election.status === filter;

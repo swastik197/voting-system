@@ -1,14 +1,50 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Link from "next/link";
-import {candidateInfo, currentElection, suggestedElection} from "@/config/candidateData";
+import { apiRequest } from "@/services/api";
+import { useRouter } from "next/router";
+
 export default function CandidateProfile() {
   const [activeTab, setActiveTab] = useState('dashboard');
   const [isEditing, setIsEditing] = useState(false);
   const [showPublicProfile, setShowPublicProfile] = useState(false);
 
-  const [candidate, setCandidate] = useState(candidateInfo);
-  const [currentElections, setcurrentElections] = useState(currentElection);
-  const [suggestedElections, setsuggestedElections] = useState(suggestedElection);
+  const [candidate, setCandidate] = useState(null);
+  const [currentElections, setCurrentElections] = useState([]);
+  const [suggestedElections, setSuggestedElections] = useState([]);
+
+  const router = useRouter();
+
+  useEffect(() => {
+    async function fetchCandidates() {
+      try {
+        const data = await apiRequest('/api/candidates');
+        setCandidate(data[0] || null); // Example: set first candidate
+      } catch (err) {
+        setCandidate(null);
+      }
+    }
+    fetchCandidates();
+  }, []);
+
+  useEffect(() => {
+    async function fetchElections() {
+      try {
+        const data = await apiRequest('/api/elections');
+        setCurrentElections(data.filter(e => e.status === 'active'));
+        setSuggestedElections(data.filter(e => e.status === 'upcoming'));
+      } catch (err) {
+        setCurrentElections([]);
+        setSuggestedElections([]);
+      }
+    }
+    fetchElections();
+  }, []);
+
+  // Logout handler
+  const handleLogout = () => {
+    localStorage.removeItem("token");
+    router.push("/admin-login"); // Redirect to login (or voter/candidate login if needed)
+  };
 
   // Public Profile Modal Component
   const PublicProfileModal = () => (
@@ -26,7 +62,7 @@ export default function CandidateProfile() {
                   </svg>
                 </div>
                 <div>
-                  <h2 className="text-2xl font-bold">{candidate.name}</h2>
+                  <h2 className="text-2xl font-bold">{candidate?.name}</h2>
                   <p className="text-blue-100">Public Profile</p>
                 </div>
               </div>
@@ -51,26 +87,26 @@ export default function CandidateProfile() {
                   <div className="space-y-3">
                     <div className="flex justify-between">
                       <span className="text-gray-600">Full Name:</span>
-                      <span className="font-medium">{candidate.name}</span>
+                      <span className="font-medium">{candidate?.name}</span>
                     </div>
                     <div className="flex justify-between">
                       <span className="text-gray-600">Age:</span>
-                      <span className="font-medium">{candidate.age} years</span>
+                      <span className="font-medium">{candidate?.age} years</span>
                     </div>
                     <div className="flex justify-between">
                       <span className="text-gray-600">Party:</span>
-                      <span className="font-medium">{candidate.party}</span>
+                      <span className="font-medium">{candidate?.party}</span>
                     </div>
                     <div className="flex justify-between">
                       <span className="text-gray-600">Running for:</span>
-                      <span className="font-medium">{candidate.position}</span>
+                      <span className="font-medium">{candidate?.position}</span>
                     </div>
                   </div>
                 </div>
               </div>
               <div>
                 <h3 className="text-lg font-semibold text-gray-900 mb-4">About</h3>
-                <p className="text-gray-600 leading-relaxed">{candidate.bio}</p>
+                <p className="text-gray-600 leading-relaxed">{candidate?.bio}</p>
               </div>
             </div>
 
@@ -78,7 +114,7 @@ export default function CandidateProfile() {
             <div>
               <h3 className="text-xl font-semibold text-gray-900 mb-4">Political Manifesto</h3>
               <div className="bg-blue-50 rounded-2xl p-4 md:p-6">
-                <p className="text-gray-700 leading-relaxed">{candidate.manifesto}</p>
+                <p className="text-gray-700 leading-relaxed">{candidate?.manifesto}</p>
               </div>
             </div>
 
@@ -87,7 +123,7 @@ export default function CandidateProfile() {
               <div>
                 <h3 className="text-lg font-semibold text-gray-900 mb-4">Professional Experience</h3>
                 <div className="space-y-4">
-                  {candidate.experience.map((exp, index) => (
+                  {candidate?.experience?.map((exp, index) => (
                     <div key={index} className="border-l-4 border-blue-500 pl-4 py-2">
                       <h4 className="font-semibold text-gray-900">{exp.title}</h4>
                       <p className="text-blue-600 text-sm">{exp.organization}</p>
@@ -100,7 +136,7 @@ export default function CandidateProfile() {
               <div>
                 <h3 className="text-lg font-semibold text-gray-900 mb-4">Education</h3>
                 <div className="space-y-4">
-                  {candidate.education.map((edu, index) => (
+                  {candidate?.education?.map((edu, index) => (
                     <div key={index} className="border-l-4 border-green-500 pl-4 py-2">
                       <h4 className="font-semibold text-gray-900">{edu.degree}</h4>
                       <p className="text-green-600 text-sm">{edu.institution}</p>
@@ -115,7 +151,7 @@ export default function CandidateProfile() {
             <div>
               <h3 className="text-lg font-semibold text-gray-900 mb-4">Key Achievements</h3>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                {candidate.achievements.map((achievement, index) => (
+                {candidate?.achievements?.map((achievement, index) => (
                   <div key={index} className="bg-green-50 rounded-xl p-4 border border-green-200">
                     <div className="flex items-start gap-3">
                       <div className="w-2 h-2 bg-green-500 rounded-full mt-2 flex-shrink-0"></div>
@@ -131,13 +167,13 @@ export default function CandidateProfile() {
               <h3 className="text-lg font-semibold text-gray-900 mb-4">Connect</h3>
               <div className="flex flex-col sm:flex-row gap-3">
                 <button className="w-full sm:w-auto px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors">
-                  Twitter: {candidate.socialMedia.twitter}
+                  Twitter: {candidate?.socialMedia?.twitter}
                 </button>
                 <button className="w-full sm:w-auto px-4 py-2 bg-blue-700 text-white rounded-lg hover:bg-blue-800 transition-colors">
-                  Facebook: {candidate.socialMedia.facebook}
+                  Facebook: {candidate?.socialMedia?.facebook}
                 </button>
                 <button className="w-full sm:w-auto px-4 py-2 bg-blue-900 text-white rounded-lg hover:bg-blue-950 transition-colors">
-                  LinkedIn: {candidate.socialMedia.linkedin}
+                  LinkedIn: {candidate?.socialMedia?.linkedin}
                 </button>
               </div>
             </div>
@@ -179,6 +215,12 @@ export default function CandidateProfile() {
                 >
                   View Public Profile
                 </button>
+                <button
+                  onClick={handleLogout}
+                  className="w-full sm:w-auto px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600 transition-colors"
+                >
+                  Logout
+                </button>
               </div>
             </div>
           </nav>
@@ -210,17 +252,17 @@ export default function CandidateProfile() {
                 <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between mb-6 gap-4">
                   <div>
                     <h1 className="text-3xl md:text-4xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent mb-3">
-                      {candidate.name}
+                      {candidate?.name}
                     </h1>
                     <div className="flex flex-wrap gap-3 mb-4">
                       <span className="px-4 py-2 bg-blue-100 text-blue-700 rounded-full font-semibold border border-blue-200">
-                        {candidate.party}
+                        {candidate?.party}
                       </span>
                       <span className="px-4 py-2 bg-emerald-100 text-emerald-700 rounded-full font-semibold border border-emerald-200">
-                        Running for {candidate.position}
+                        Running for {candidate?.position}
                       </span>
                       <span className="px-4 py-2 bg-purple-100 text-purple-700 rounded-full font-semibold border border-purple-200">
-                        Age {candidate.age}
+                        Age {candidate?.age}
                       </span>
                     </div>
                   </div>
@@ -236,7 +278,7 @@ export default function CandidateProfile() {
                     </button>
                   </div>
                 </div>
-                <p className="text-gray-600 leading-relaxed text-base md:text-lg mb-6">{candidate.bio}</p>
+                <p className="text-gray-600 leading-relaxed text-base md:text-lg mb-6">{candidate?.bio}</p>
                 
                 {/* Contact Info */}
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
@@ -244,20 +286,20 @@ export default function CandidateProfile() {
                     <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M3 8l7.89 4.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
                     </svg>
-                    <span className="text-sm">{candidate.email}</span>
+                    <span className="text-sm">{candidate?.email}</span>
                   </div>
                   <div className="flex items-center space-x-3 text-gray-600">
                     <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
                     </svg>
-                    <span className="text-sm">{candidate.phone}</span>
+                    <span className="text-sm">{candidate?.phone}</span>
                   </div>
                   <div className="flex items-center space-x-3 text-gray-600">
                     <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
                     </svg>
-                    <span className="text-sm">{candidate.address}</span>
+                    <span className="text-sm">{candidate?.address}</span>
                   </div>
                 </div>
               </div>
@@ -423,7 +465,7 @@ export default function CandidateProfile() {
                   Professional Experience
                 </h3>
                 <div className="space-y-4">
-                  {candidate.experience.map((exp, index) => (
+                  {candidate?.experience?.map((exp, index) => (
                     <div key={index} className="border-l-4 border-blue-500 pl-4 py-2">
                       <h4 className="font-semibold text-gray-900">{exp.title}</h4>
                       <p className="text-blue-600 text-sm font-medium">{exp.organization}</p>
@@ -446,7 +488,7 @@ export default function CandidateProfile() {
                   Education Background
                 </h3>
                 <div className="space-y-4">
-                  {candidate.education.map((edu, index) => (
+                  {candidate?.education?.map((edu, index) => (
                     <div key={index} className="border-l-4 border-green-500 pl-4 py-2">
                       <h4 className="font-semibold text-gray-900">{edu.degree}</h4>
                       <p className="text-green-600 text-sm font-medium">{edu.institution}</p>
@@ -467,7 +509,7 @@ export default function CandidateProfile() {
                   Political Manifesto
                 </h3>
                 <div className="bg-gradient-to-r from-purple-50 to-blue-50 rounded-xl p-6 border border-purple-200">
-                  <p className="text-gray-700 leading-relaxed">{candidate.manifesto}</p>
+                  <p className="text-gray-700 leading-relaxed">{candidate?.manifesto}</p>
                 </div>
               </div>
 
@@ -482,7 +524,7 @@ export default function CandidateProfile() {
                   Key Achievements
                 </h3>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  {candidate.achievements.map((achievement, index) => (
+                  {candidate?.achievements?.map((achievement, index) => (
                     <div key={index} className="p-4 bg-gradient-to-br from-green-50 to-emerald-50 rounded-xl border border-green-200">
                       <div className="flex items-start gap-3">
                         <div className="w-2 h-2 bg-green-500 rounded-full mt-2 flex-shrink-0"></div>

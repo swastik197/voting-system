@@ -1,6 +1,7 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Link from "next/link";
 import {stat, recentElection, candidate, voter } from "@/config/adminPage_Data";
+import { apiRequest } from "@/services/api";
 export default function AdminPage() {
   const [activeTab, setActiveTab] = useState('overview');
   const [showCreateElectionModal, setShowCreateElectionModal] = useState(false);
@@ -16,7 +17,8 @@ export default function AdminPage() {
  const [recentElections, setrecentElections]= useState(recentElection)
  const[candidates, setcandidates]= useState(candidate)
  const[voters, setvoters]=useState(voter)
- 
+ const [candidateLoading, setCandidateLoading] = useState({});
+ const [candidateError, setCandidateError] = useState({});
 
   // Create Election Modal Component
   const CreateElectionModal = () => (
@@ -44,7 +46,7 @@ export default function AdminPage() {
 
           {/* Modal Content */}
           <div className="p-2 sm:p-4 md:p-8">
-            <form className="space-y-4 sm:space-y-6 md:space-y-8">
+            <form className="space-y-4 sm:space-y-6 md:space-y-8" onSubmit={handleCreateElection}>
               {/* Basic Information */}
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 sm:gap-4 md:gap-6">
                 <div>
@@ -177,7 +179,6 @@ export default function AdminPage() {
                 </button>
                 <button
                   type="submit"
-                  onClick={(e) => {/* handle submit */}}
                   className="w-full md:flex-1 px-2 py-2 sm:px-4 sm:py-2 md:px-6 md:py-3 bg-gradient-to-r from-blue-500 to-purple-600 text-white rounded-xl font-semibold hover:shadow-lg transition-all duration-200 text-xs sm:text-sm md:text-base"
                 >
                   Create Election
@@ -189,6 +190,75 @@ export default function AdminPage() {
       </div>
     </div>
   );
+
+  const handleCreateElection = async (e) => {
+    e.preventDefault();
+    try {
+      await apiRequest('/api/elections', 'POST', newElection);
+      setShowCreateElectionModal(false);
+      // Refresh elections list from backend
+      const updatedElections = await apiRequest('/api/elections');
+      setrecentElections(updatedElections);
+      // Optionally show a success message
+    } catch (err) {
+      alert(err.message);
+    }
+  };
+
+  // Approve candidate
+  const handleApproveCandidate = async (candidateId) => {
+    setCandidateLoading((prev) => ({ ...prev, [candidateId]: true }));
+    setCandidateError((prev) => ({ ...prev, [candidateId]: null }));
+    try {
+      await apiRequest(`/api/candidates/${candidateId}/approve`, 'POST', null, adminToken);
+      await fetchCandidates();
+    } catch (err) {
+      setCandidateError((prev) => ({ ...prev, [candidateId]: err.message }));
+    } finally {
+      setCandidateLoading((prev) => ({ ...prev, [candidateId]: false }));
+    }
+  };
+
+  // Remove candidate
+  const handleRemoveCandidate = async (candidateId) => {
+    setCandidateLoading((prev) => ({ ...prev, [candidateId]: true }));
+    setCandidateError((prev) => ({ ...prev, [candidateId]: null }));
+    try {
+      await apiRequest(`/api/candidates/${candidateId}`, 'DELETE', null, adminToken);
+      await fetchCandidates();
+    } catch (err) {
+      setCandidateError((prev) => ({ ...prev, [candidateId]: err.message }));
+    } finally {
+      setCandidateLoading((prev) => ({ ...prev, [candidateId]: false }));
+    }
+  };
+
+  // Fetch candidates from backend
+  const fetchCandidates = async () => {
+    try {
+      const data = await apiRequest('/api/candidates');
+      setcandidates(data);
+    } catch (err) {
+      // Optionally handle error
+    }
+  };
+
+  // User state and effect for admin check
+  const [user, setUser] = useState(null);
+  useEffect(() => {
+    const storedUser = typeof window !== 'undefined' ? JSON.parse(localStorage.getItem('user')) : null;
+    setUser(storedUser);
+    // Redirect if not admin
+    if (storedUser && storedUser.role !== 'admin') {
+      window.location.href = '/admin-login';
+    } else if (!storedUser) {
+      window.location.href = '/admin-login';
+    }
+  }, []);
+
+  if (!user || user.role !== 'admin') {
+    return null;
+  }
 
   return (
     <>
@@ -216,6 +286,7 @@ export default function AdminPage() {
               <div className="flex flex-col sm:flex-row items-start sm:items-center gap-3 sm:gap-6">
                 <Link href="/dashboard" className="text-gray-700 hover:text-blue-600 font-medium transition-colors duration-200">Dashboard</Link>
                 <Link href="/elections" className="text-gray-700 hover:text-blue-600 font-medium transition-colors duration-200">Elections</Link>
+                <Link href="/change-admin-password" className="text-gray-700 hover:text-blue-600 font-medium transition-colors duration-200">Change Admin Password</Link>
                 <button 
                   onClick={() => setShowCreateElectionModal(true)}
                   className="w-full sm:w-auto px-4 py-2 bg-gradient-to-r from-green-500 to-emerald-600 text-white rounded-lg hover:shadow-lg transition-all duration-200"
@@ -246,292 +317,189 @@ export default function AdminPage() {
             </p>
           </div>
 
-          {/* Stats Overview */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-12">
-            <div className="bg-white/70 backdrop-blur-xl rounded-2xl p-6 shadow-xl border border-white/20 text-center group hover:scale-105 transition-transform duration-200">
-              <div className="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                <svg className="w-6 h-6 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 5H7a2 2 0 00-2 2v10a2 2 0 002 2h8a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
+          {/* Tabs */}
+          <div className="mb-8">
+            <div className="flex flex-col sm:flex-row gap-2 sm:gap-4">
+              <button
+                onClick={() => setActiveTab('overview')}
+                className={`flex-1 px-4 py-2 rounded-lg font-semibold transition-all duration-200 flex items-center justify-center gap-2
+                ${activeTab === 'overview' ? 'bg-gradient-to-r from-blue-500 to-purple-600 text-white shadow-md' : 'bg-gray-100 text-gray-700 hover:bg-gray-200'}`}
+              >
+                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M3 3h18M3 12h18M3 21h18" />
                 </svg>
-              </div>
-              <div className="text-3xl font-bold text-gray-900 mb-2">{stats.totalElections}</div>
-              <div className="text-gray-600 font-medium">Total Elections</div>
-            </div>
-            <div className="bg-white/70 backdrop-blur-xl rounded-2xl p-6 shadow-xl border border-white/20 text-center group hover:scale-105 transition-transform duration-200">
-              <div className="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                <svg className="w-6 h-6 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13 10V3L4 14h7v7l9-11h-7z" />
+                Overview
+              </button>
+              <button
+                onClick={() => setActiveTab('candidates')}
+                className={`flex-1 px-4 py-2 rounded-lg font-semibold transition-all duration-200 flex items-center justify-center gap-2
+                ${activeTab === 'candidates' ? 'bg-gradient-to-r from-blue-500 to-purple-600 text-white shadow-md' : 'bg-gray-100 text-gray-700 hover:bg-gray-200'}`}
+              >
+                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M7 8h10M7 12h10m-5 4h5" />
                 </svg>
-              </div>
-              <div className="text-3xl font-bold text-gray-900 mb-2">{stats.activeElections}</div>
-              <div className="text-gray-600 font-medium">Active Elections</div>
-            </div>
-            <div className="bg-white/70 backdrop-blur-xl rounded-2xl p-6 shadow-xl border border-white/20 text-center group hover:scale-105 transition-transform duration-200">
-              <div className="w-12 h-12 bg-purple-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                <svg className="w-6 h-6 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+                Candidates
+              </button>
+              <button
+                onClick={() => setActiveTab('voters')}
+                className={`flex-1 px-4 py-2 rounded-lg font-semibold transition-all duration-200 flex items-center justify-center gap-2
+                ${activeTab === 'voters' ? 'bg-gradient-to-r from-blue-500 to-purple-600 text-white shadow-md' : 'bg-gray-100 text-gray-700 hover:bg-gray-200'}`}
+              >
+                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 12h14M5 16h14M5 8h14" />
                 </svg>
-              </div>
-              <div className="text-3xl font-bold text-gray-900 mb-2">{stats.totalVoters?.toLocaleString()}</div>
-              <div className="text-gray-600 font-medium">Registered Voters</div>
-            </div>
-            <div className="bg-white/70 backdrop-blur-xl rounded-2xl p-6 shadow-xl border border-white/20 text-center group hover:scale-105 transition-transform duration-200">
-              <div className="w-12 h-12 bg-orange-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                <svg className="w-6 h-6 text-orange-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
-                </svg>
-              </div>
-              <div className="text-3xl font-bold text-gray-900 mb-2">{stats.totalCandidates}</div>
-              <div className="text-gray-600 font-medium">Total Candidates</div>
-            </div>
-          </div>
-
-          {/* Tab Navigation */}
-          <div className="flex flex-col sm:flex-row gap-2 mb-8 bg-white/60 backdrop-blur-xl rounded-2xl p-2 shadow-xl border border-white/20 w-full overflow-x-auto">
-            <div className="flex flex-row w-full min-w-[320px] sm:min-w-0">
-              {[ 
-                { key: 'overview', label: 'Overview', icon: 'M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2H5a2 2 0 00-2-2v0' },
-                { key: 'elections', label: 'Manage Elections', icon: 'M9 5H7a2 2 0 00-2 2v10a2 2 0 002 2h8a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2' },
-                { key: 'candidates', label: 'Candidates', icon: 'M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z' },
-                { key: 'voters', label: 'Voters', icon: 'M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z' }
-              ].map((tab) => (
-                <button
-                  key={tab.key}
-                  onClick={() => setActiveTab(tab.key)}
-                  className={`flex items-center flex-1 min-w-[150px] px-4 sm:px-6 py-3 sm:py-4 rounded-xl font-semibold transition-all duration-200 whitespace-nowrap overflow-hidden text-ellipsis ${
-                    activeTab === tab.key
-                      ? 'bg-gradient-to-r from-blue-500 to-purple-600 text-white shadow-lg'
-                      : 'text-gray-700 hover:bg-white/80 hover:shadow-md'
-                  }`}
-                  style={{textOverflow: 'ellipsis'}}
-                >
-                  <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d={tab.icon} />
-                  </svg>
-                  <span className="truncate w-full">{tab.label}</span>
-                </button>
-              ))}
+                Voters
+              </button>
             </div>
           </div>
 
           {/* Tab Content */}
-          {activeTab === 'overview' && (
-            <div className="space-y-8">
-              {/* Recent Elections */}
-              <div className="bg-white/70 backdrop-blur-xl rounded-2xl shadow-xl border border-white/20">
-                <div className="p-4 sm:p-6 border-b border-gray-200">
-                  <h2 className="text-xl sm:text-2xl font-bold text-gray-900">Recent Elections</h2>
-                  <p className="text-gray-600 text-sm sm:text-base">Latest election activity and status</p>
+          <div>
+            {activeTab === 'overview' && (
+              <div className="bg-white rounded-xl shadow-md p-4 sm:p-6 md:p-8">
+                <h2 className="text-xl sm:text-2xl font-bold mb-4">Election Overview</h2>
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                  <div className="p-4 bg-blue-50 rounded-lg shadow-sm">
+                    <h3 className="text-lg font-semibold mb-2">Total Elections</h3>
+                    <p className="text-3xl font-bold">{stats.totalElections}</p>
+                  </div>
+                  <div className="p-4 bg-green-50 rounded-lg shadow-sm">
+                    <h3 className="text-lg font-semibold mb-2">Ongoing Elections</h3>
+                    <p className="text-3xl font-bold">{stats.ongoingElections}</p>
+                  </div>
+                  <div className="p-4 bg-yellow-50 rounded-lg shadow-sm">
+                    <h3 className="text-lg font-semibold mb-2">Upcoming Elections</h3>
+                    <p className="text-3xl font-bold">{stats.upcomingElections}</p>
+                  </div>
+                  <div className="p-4 bg-red-50 rounded-lg shadow-sm">
+                    <h3 className="text-lg font-semibold mb-2">Ended Elections</h3>
+                    <p className="text-3xl font-bold">{stats.endedElections}</p>
+                  </div>
                 </div>
-                <div className="p-4 sm:p-6">
-                  <div className="space-y-3 sm:space-y-4">
+
+                <div className="mt-8">
+                  <h3 className="text-lg sm:text-xl font-semibold mb-4">Recent Elections</h3>
+                  <div className="space-y-4">
                     {recentElections.map((election) => (
-                      <div key={election.id} className="p-3 sm:p-4 bg-gradient-to-r from-blue-50 to-purple-50 rounded-xl border border-blue-200">
-                        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
-                          <div>
-                            <h3 className="text-base sm:text-lg font-semibold text-gray-900">{election.title}</h3>
-                            <div className="flex flex-wrap items-center gap-2 sm:gap-4 mt-2">
-                              <span className={`px-2 sm:px-3 py-1 rounded-full text-xs sm:text-sm font-semibold ${
-                                election.status === 'active' ? 'bg-green-100 text-green-700' :
-                                election.status === 'upcoming' ? 'bg-blue-100 text-blue-700' :
-                                'bg-gray-100 text-gray-700'
-                              }`}>
-                                {election.status}
-                              </span>
-                              <span className="text-gray-600 text-xs sm:text-sm">{election.voters.toLocaleString()} voters</span>
-                              <span className="text-gray-600 text-xs sm:text-sm">{election.candidates} candidates</span>
-                            </div>
-                          </div>
-                          <div className="flex gap-2 mt-2 sm:mt-0">
-                            <button className="px-3 sm:px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors text-xs sm:text-sm">
-                              Manage
-                            </button>
-                            <button className="px-3 sm:px-4 py-2 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition-colors text-xs sm:text-sm">
-                              View
-                            </button>
-                          </div>
+                      <div key={election.id} className="p-4 bg-gray-50 rounded-lg shadow-sm flex flex-col sm:flex-row gap-4">
+                        <div className="flex-1">
+                          <h4 className="text-md sm:text-lg font-semibold">{election.title}</h4>
+                          <p className="text-xs sm:text-sm text-gray-500">{election.date}</p>
+                        </div>
+                        <div className="flex-shrink-0">
+                          <Link href={`/elections/${election.id}`} className="px-3 py-1 text-xs sm:text-sm bg-gradient-to-r from-blue-500 to-purple-600 text-white rounded-lg shadow-md hover:shadow-lg transition-all duration-200">
+                            View Details
+                          </Link>
                         </div>
                       </div>
                     ))}
                   </div>
                 </div>
               </div>
-            </div>
-          )}
+            )}
 
-          {activeTab === 'elections' && (
-            <div className="space-y-8">
-              <div className="bg-white/70 backdrop-blur-xl rounded-2xl shadow-xl border border-white/20">
-                <div className="p-6 border-b border-gray-200 flex justify-between items-center">
-                  <div>
-                    <h2 className="text-2xl font-bold text-gray-900">Election Management</h2>
-                    <p className="text-gray-600">Create, modify, and oversee elections</p>
-                  </div>
-                  <button 
-                    onClick={() => setShowCreateElectionModal(true)}
-                    className="px-6 py-3 bg-gradient-to-r from-green-500 to-emerald-600 text-white rounded-xl font-semibold hover:shadow-lg transition-all duration-200"
-                  >
-                    + New Election
-                  </button>
-                </div>
-                <div className="p-6">
-                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                    {recentElections.map((election) => (
-                      <div key={election.id} className="p-6 bg-gradient-to-br from-white to-blue-50 rounded-2xl border border-blue-100 hover:shadow-lg transition-all duration-200">
-                        <div className="mb-4">
-                          <h3 className="text-lg font-semibold text-gray-900 mb-2">{election.title}</h3>
-                          <div className="flex items-center gap-2 mb-3">
-                            <span className={`px-3 py-1 rounded-full text-sm font-semibold ${
-                              election.status === 'active' ? 'bg-green-100 text-green-700 border border-green-200' :
-                              election.status === 'upcoming' ? 'bg-blue-100 text-blue-700 border border-blue-200' :
-                              'bg-gray-100 text-gray-700 border border-gray-200'
-                            }`}>
-                              {election.status}
-                            </span>
-                          </div>
-                          <div className="space-y-2 text-sm text-gray-600">
-                            <div className="flex justify-between">
-                              <span>Voters:</span>
-                              <span className="font-medium">{election.voters.toLocaleString()}</span>
-                            </div>
-                            <div className="flex justify-between">
-                              <span>Candidates:</span>
-                              <span className="font-medium">{election.candidates}</span>
-                            </div>
-                            <div className="flex justify-between">
-                              <span>Start Date:</span>
-                              <span className="font-medium">{new Date(election.startDate).toLocaleDateString()}</span>
-                            </div>
-                          </div>
-                        </div>
-                        <div className="flex gap-2">
-                          <button className="flex-1 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors text-sm font-medium">
-                            Manage
-                          </button>
-                          <button className="px-4 py-2 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition-colors text-sm">
-                            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 5v.01M12 12v.01M12 19v.01M12 6a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2z" />
+            {activeTab === 'candidates' && (
+              <div className="bg-white rounded-xl shadow-md p-4 sm:p-6 md:p-8">
+                <h2 className="text-xl sm:text-2xl font-bold mb-4">Candidates Management</h2>
+                <div className="space-y-4">
+                  {candidates.map((candidate) => (
+                    <div key={candidate.id} className="p-4 bg-gray-50 rounded-lg shadow-sm flex flex-col sm:flex-row gap-4">
+                      <div className="flex-1">
+                        <h4 className="text-md sm:text-lg font-semibold">{candidate.name}</h4>
+                        <p className="text-xs sm:text-sm text-gray-500">{candidate.party}</p>
+                      </div>
+                      <div className="flex-shrink-0 flex gap-2">
+                        <button
+                          onClick={() => handleApproveCandidate(candidate.id)}
+                          disabled={candidateLoading[candidate.id]}
+                          className="px-3 py-1 text-xs sm:text-sm bg-green-100 text-green-700 rounded-lg shadow-md hover:bg-green-200 transition-all duration-200 flex items-center gap-1"
+                        >
+                          {candidateLoading[candidate.id] ? (
+                            <svg className="w-4 h-4 animate-spin" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" />
                             </svg>
-                          </button>
-                        </div>
+                          ) : (
+                            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 5H7a2 2 0 00-2 2v10a2 2 0 002 2h8a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
+                            </svg>
+                          )}
+                          Approve
+                        </button>
+                        <button
+                          onClick={() => handleRemoveCandidate(candidate.id)}
+                          disabled={candidateLoading[candidate.id]}
+                          className="px-3 py-1 text-xs sm:text-sm bg-red-100 text-red-700 rounded-lg shadow-md hover:bg-red-200 transition-all duration-200 flex items-center gap-1"
+                        >
+                          {candidateLoading[candidate.id] ? (
+                            <svg className="w-4 h-4 animate-spin" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" />
+                            </svg>
+                          ) : (
+                            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" />
+                            </svg>
+                          )}
+                          Remove
+                        </button>
                       </div>
-                    ))}
-                  </div>
-                </div>
-              </div>
-            </div>
-          )}
-
-          {activeTab === 'candidates' && (
-            <div className="space-y-8">
-              <div className="bg-white/70 backdrop-blur-xl rounded-2xl shadow-xl border border-white/20">
-                <div className="p-4 sm:p-6 border-b border-gray-200">
-                  <h2 className="text-xl sm:text-2xl font-bold text-gray-900">Candidate Management</h2>
-                  <p className="text-gray-600 text-sm sm:text-base">Review and approve candidate registrations</p>
-                </div>
-                <div className="p-4 sm:p-6">
-                  <div className="space-y-3 sm:space-y-4">
-                    {candidates.map((candidate) => (
-                      <div key={candidate.id} className="p-3 sm:p-6 bg-gradient-to-r from-white to-gray-50 rounded-xl border border-gray-200 hover:shadow-md transition-all">
-                        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
-                          <div className="flex items-center gap-2 sm:gap-4">
-                            <div className="w-10 h-10 sm:w-12 sm:h-12 bg-gradient-to-br from-blue-400 to-purple-500 rounded-full flex items-center justify-center">
-                              <svg className="w-5 h-5 sm:w-6 sm:h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
-                              </svg>
-                            </div>
-                            <div>
-                              <h3 className="text-base sm:text-lg font-semibold text-gray-900">{candidate.name}</h3>
-                              <div className="flex flex-wrap items-center gap-2 sm:gap-3 text-xs sm:text-sm text-gray-600">
-                                <span>{candidate.party}</span>
-                                <span>•</span>
-                                <span>Age {candidate.age}</span>
-                                <span>•</span>
-                                <span>{candidate.votes.toLocaleString()} votes</span>
-                              </div>
-                            </div>
-                          </div>
-                          <div className="flex gap-2 sm:gap-3 mt-2 sm:mt-0">
-                            <span className={`px-2 sm:px-3 py-1 rounded-full text-xs sm:text-sm font-semibold ${
-                              candidate.status === 'approved' ? 'bg-green-100 text-green-700 border border-green-200' :
-                              'bg-yellow-100 text-yellow-700 border border-yellow-200'
-                            }`}>
-                              {candidate.status}
-                            </span>
-                            <button className="px-3 sm:px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors text-xs sm:text-sm">
-                              View Profile
-                            </button>
-                            {candidate.status === 'pending' && (
-                              <button className="px-3 sm:px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors text-xs sm:text-sm">
-                                Approve
-                              </button>
-                            )}
-                          </div>
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              </div>
-            </div>
-          )}
-
-          {activeTab === 'voters' && (
-  <div className="space-y-8">
-    <div className="bg-white/70 backdrop-blur-xl rounded-2xl shadow-xl border border-white/20">
-      <div className="p-4 sm:p-6 border-b border-gray-200">
-        <h2 className="text-xl sm:text-2xl font-bold text-gray-900">Voter Management</h2>
-        <p className="text-gray-600 text-sm sm:text-base">Verify voter registrations and manage voter database</p>
-      </div>
-      <div className="p-4 sm:p-6">
-        <div className="space-y-3 sm:space-y-4">
-          {voters.map((voter) => (
-            <div key={voter.id} className="p-3 sm:p-6 bg-gradient-to-r from-white to-blue-50 rounded-xl border border-blue-100 hover:shadow-md transition-all">
-              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
-                <div className="flex items-center gap-2 sm:gap-4">
-                  <div className="w-10 h-10 sm:w-12 sm:h-12 bg-gradient-to-br from-green-400 to-blue-500 rounded-full flex items-center justify-center">
-                    <svg className="w-5 h-5 sm:w-6 sm:h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
-                    </svg>
-                  </div>
-                  <div>
-                    <h3 className="text-base sm:text-lg font-semibold text-gray-900">{voter.name}</h3>
-                    <div className="flex flex-wrap items-center gap-2 sm:gap-3 text-xs sm:text-sm text-gray-600">
-                      <span>Age {voter.age}</span>
-                      <span>•</span>
-                      <span>Registered: {new Date(voter.registrationDate).toLocaleDateString()}</span>
                     </div>
-                  </div>
-                </div>
-                <div className="flex gap-2 sm:gap-3 mt-2 sm:mt-0">
-                  <span className={`px-2 sm:px-3 py-1 rounded-full text-xs sm:text-sm font-semibold ${
-                    voter.status === 'Verified' ? 'bg-green-100 text-green-700 border border-green-200' :
-                    'bg-yellow-100 text-yellow-700 border border-yellow-200'
-                  }`}>
-                    {voter.status}
-                  </span>
-                  <button className="px-3 sm:px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors text-xs sm:text-sm">
-                    View Details
-                  </button>
-                  {voter.status === 'Pending' && (
-                    <button className="px-3 sm:px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors text-xs sm:text-sm">
-                      Verify
-                    </button>
-                  )}
+                  ))}
                 </div>
               </div>
-            </div>
-          ))}
-        </div>
-      </div>
-    </div>
-  </div>
-)}
-        </div>
-      </div>
+            )}
 
-      {/* Create Election Modal */}
-      <CreateElectionModal />
+            {activeTab === 'voters' && (
+              <div className="bg-white rounded-xl shadow-md p-4 sm:p-6 md:p-8">
+                <h2 className="text-xl sm:text-2xl font-bold mb-4">Voters Management</h2>
+                <div className="space-y-4">
+                  {voters.map((voter) => (
+                    <div key={voter.id} className="p-4 bg-gray-50 rounded-lg shadow-sm flex flex-col sm:flex-row gap-4">
+                      <div className="flex-1">
+                        <h4 className="text-md sm:text-lg font-semibold">{voter.name}</h4>
+                        <p className="text-xs sm:text-sm text-gray-500">{voter.email}</p>
+                      </div>
+                      <div className="flex-shrink-0 flex gap-2">
+                        <button
+                          onClick={() => handleApproveCandidate(voter.id)}
+                          disabled={candidateLoading[voter.id]}
+                          className="px-3 py-1 text-xs sm:text-sm bg-green-100 text-green-700 rounded-lg shadow-md hover:bg-green-200 transition-all duration-200 flex items-center gap-1"
+                        >
+                          {candidateLoading[voter.id] ? (
+                            <svg className="w-4 h-4 animate-spin" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" />
+                            </svg>
+                          ) : (
+                            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 5H7a2 2 0 00-2 2v10a2 2 0 002 2h8a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
+                            </svg>
+                          )}
+                          Approve
+                        </button>
+                        <button
+                          onClick={() => handleRemoveCandidate(voter.id)}
+                          disabled={candidateLoading[voter.id]}
+                          className="px-3 py-1 text-xs sm:text-sm bg-red-100 text-red-700 rounded-lg shadow-md hover:bg-red-200 transition-all duration-200 flex items-center gap-1"
+                        >
+                          {candidateLoading[voter.id] ? (
+                            <svg className="w-4 h-4 animate-spin" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" />
+                            </svg>
+                          ) : (
+                            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" />
+                            </svg>
+                          )}
+                          Remove
+                        </button>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
+          </div>
+        </div>
+      </div>
     </>
   );
 }

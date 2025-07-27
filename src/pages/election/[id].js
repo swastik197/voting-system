@@ -2,11 +2,12 @@ import { useState, useEffect } from "react";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import Head from "next/head";
-import {electionDetail, candidate} from "@/config/electionDetails_Data";
+import { apiRequest } from "@/services/api";
+
 export default function ElectionDetails() {
   const router = useRouter();
   const { id } = router.query;
-  
+
   const [selectedCandidate, setSelectedCandidate] = useState(null);
   const [showVoteModal, setShowVoteModal] = useState(false);
   const [showCandidateProfile, setShowCandidateProfile] = useState(false);
@@ -15,12 +16,17 @@ export default function ElectionDetails() {
   const [timeRemaining, setTimeRemaining] = useState("Calculating...");
   const [isClient, setIsClient] = useState(false);
 
+  const [election, setElection] = useState(null);
+  const [candidates, setCandidates] = useState([]);
+
+  const [voteLoading, setVoteLoading] = useState(false);
+  const [voteError, setVoteError] = useState(null);
+  const [voteSuccess, setVoteSuccess] = useState(false);
+
   const handleViewProfile = (candidate) => {
     setSelectedCandidateProfile(candidate);
     setShowCandidateProfile(true);
   };
-const [ election, setelection]= useState(electionDetail)
-const [candidates, setcandidates]= useState(candidate)
   
 
   const handleVote = (candidateId) => {
@@ -28,10 +34,25 @@ const [candidates, setcandidates]= useState(candidate)
     setShowVoteModal(true);
   };
 
+  const submitVote = async () => {
+    setVoteLoading(true);
+    setVoteError(null);
+    setVoteSuccess(false);
+    try {
+      await apiRequest('/api/votes', 'POST', { electionId: id, candidateId: selectedCandidate });
+      setVoteSuccess(true);
+      setShowVoteModal(false);
+      // Refresh election/candidates data
+      await fetchElection();
+    } catch (err) {
+      setVoteError(err.message);
+    } finally {
+      setVoteLoading(false);
+    }
+  };
+
   const confirmVote = () => {
-    console.log('Vote cast for candidate:', selectedCandidate);
-    setShowVoteModal(false);
-    // Handle vote submission
+    submitVote();
   };
 
   const getTimeRemaining = () => {
@@ -75,7 +96,30 @@ const [candidates, setcandidates]= useState(candidate)
     const interval = setInterval(updateTimeRemaining, 60000);
     
     return () => clearInterval(interval);
-  }, [election.endDate]);
+  }, [election?.endDate]);
+
+  useEffect(() => {
+    async function fetchElection() {
+      if (!id) return;
+      try {
+        const data = await apiRequest(`/api/elections/${id}`);
+        setElection(data);
+        setCandidates(data.candidates || []);
+      } catch (err) {
+        setElection(null);
+        setCandidates([]);
+      }
+    }
+    fetchElection();
+  }, [id]);
+
+  if (!election) {
+    return (
+      <div className="flex items-center justify-center min-h-screen">
+        <p className="text-gray-500 text-lg">Loading election details...</p>
+      </div>
+    );
+  }
 
   return (
     <>
@@ -481,26 +525,25 @@ const [candidates, setcandidates]= useState(candidate)
 
       {/* Vote Confirmation Modal */}
       {showVoteModal && (
-        <div className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4">
-          <div className="bg-white rounded-2xl p-6 sm:p-8 max-w-md w-full mx-4">
-            <h3 className="text-xl sm:text-2xl font-bold text-blue-900 mb-4">Confirm Your Vote</h3>
-            <p className="text-blue-700 mb-6 text-sm sm:text-base">
-              You are about to cast your vote for{' '}
-              <strong>{candidates.find(c => c.id === selectedCandidate)?.name}</strong>.
-              This action cannot be undone.
-            </p>
-            <div className="flex flex-col sm:flex-row gap-3 sm:gap-4">
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-sm">
+          <div className="bg-white rounded-2xl shadow-2xl p-6 max-w-sm w-full">
+            <h2 className="text-lg font-bold mb-2">Confirm Your Vote</h2>
+            <p className="mb-4">Are you sure you want to vote for this candidate?</p>
+            {voteError && <p className="text-red-600 text-sm mb-2">{voteError}</p>}
+            <div className="flex gap-2">
               <button
+                className="flex-1 px-4 py-2 bg-gray-100 text-gray-700 rounded-lg font-semibold hover:bg-gray-200"
                 onClick={() => setShowVoteModal(false)}
-                className="w-full px-4 sm:px-6 py-2 sm:py-3 bg-gray-200 text-gray-700 rounded-xl font-medium hover:bg-gray-300 transition-colors text-sm sm:text-base"
+                disabled={voteLoading}
               >
                 Cancel
               </button>
               <button
+                className="flex-1 px-4 py-2 bg-gradient-to-r from-blue-500 to-purple-600 text-white rounded-lg font-semibold hover:shadow-lg transition-all duration-200 disabled:opacity-50"
                 onClick={confirmVote}
-                className="w-full px-4 sm:px-6 py-2 sm:py-3 bg-gradient-to-r from-sky-500 to-blue-600 text-white rounded-xl font-medium hover:shadow-lg transition-all text-sm sm:text-base"
+                disabled={voteLoading}
               >
-                Confirm Vote
+                {voteLoading ? 'Voting...' : 'Confirm Vote'}
               </button>
             </div>
           </div>

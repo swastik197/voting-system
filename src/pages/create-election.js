@@ -1,5 +1,6 @@
 import { useState } from "react";
 import Link from "next/link";
+import { apiRequest } from "@/services/api";
 
 export default function CreateElection() {
   const [formData, setFormData] = useState({
@@ -11,10 +12,15 @@ export default function CreateElection() {
     visibility: 'public'
   });
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log('Election created:', formData);
-    // Handle form submission
+    try {
+      await apiRequest('/api/elections', 'POST', formData);
+      alert('Election created successfully!');
+      // Optionally redirect or reset form
+    } catch (err) {
+      alert(err.message);
+    }
   };
 
   const handleChange = (e) => {

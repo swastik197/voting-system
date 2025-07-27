@@ -1,5 +1,6 @@
 import { useState } from "react";
 import Link from "next/link";
+import { apiRequest } from "@/services/api";
 
 export default function CandidateRegister() {
   const [formData, setFormData] = useState({
@@ -17,14 +18,33 @@ export default function CandidateRegister() {
 
   const [currentStep, setCurrentStep] = useState(1);
   const totalSteps = 3;
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
+  const [success, setSuccess] = useState(false);
 
-  const handleSubmit = (e) => {
+  const submitRegistration = async () => {
+    setLoading(true);
+    setError(null);
+    setSuccess(false);
+    try {
+      // Map fullName to name for backend compatibility
+      const payload = { ...formData, name: formData.fullName, status: 'pending' };
+      delete payload.fullName;
+      await apiRequest('/api/candidates', 'POST', payload);
+      setSuccess(true);
+    } catch (err) {
+      setError(err.message);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
     if (currentStep < totalSteps) {
       setCurrentStep(currentStep + 1);
     } else {
-      console.log('Registration submitted:', formData);
-      // Handle final submission
+      await submitRegistration();
     }
   };
 
@@ -414,6 +434,14 @@ export default function CandidateRegister() {
                 {currentStep === totalSteps ? 'Submit Registration' : 'Next Step'}
               </button>
             </div>
+
+            {/* Status Messages */}
+            {success && (
+              <div className="text-green-600 font-semibold mb-4">Registration submitted successfully!</div>
+            )}
+            {error && (
+              <div className="text-red-600 font-semibold mb-4">{error}</div>
+            )}
           </form>
         </div>
       </div>
